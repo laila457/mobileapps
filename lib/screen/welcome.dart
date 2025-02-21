@@ -25,14 +25,14 @@ class welcomescreen extends StatelessWidget {
                     text: const TextSpan(
                       children: [
                         TextSpan(
-                            text: 'Welcome Back! \n',
+                            text: ' \n',
                             style: TextStyle(
                               fontSize: 45.0,
                               fontWeight: FontWeight.w600,
                             )),
                         TextSpan(
                             text:
-                                '\n enter personal details tot youremployee account',
+                                '\n ',
                             style: TextStyle(
                               fontSize: 20,
                             )),
