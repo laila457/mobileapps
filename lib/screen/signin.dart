@@ -3,6 +3,7 @@ import 'package:wellpage/icons_plus/icons_plus.dart';
 import 'package:wellpage/screen/signup.dart';
 import 'package:wellpage/widgets/custom_scaffold.dart';
 import 'package:wellpage/theme/theme.dart';
+import 'package:wellpage/dasboard.dart'; // Import the main1.dart file
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -22,7 +23,7 @@ class _SigninState extends State<Signin> {
         children: [
           const Expanded(
             flex: 1,
-            child: SizedBox(height: 10),
+            child: SizedBox(height: 80),
           ),
           Expanded(
             flex: 7,
@@ -49,7 +50,7 @@ class _SigninState extends State<Signin> {
                           color: lightColorScheme.onSurface,
                         ),
                       ),
-                      const SizedBox(height: 40.0),
+                      const SizedBox(height: 80.0),
                       TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -71,7 +72,7 @@ class _SigninState extends State<Signin> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 25.0),
+                      const SizedBox(height: 75.0),
                       TextFormField(
                         obscureText: true,
                         obscuringCharacter: '*',
@@ -95,7 +96,7 @@ class _SigninState extends State<Signin> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 25.0),
+                      const SizedBox(height: 75.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -127,7 +128,7 @@ class _SigninState extends State<Signin> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 25.0),
+                      const SizedBox(height: 75.0),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -136,16 +137,22 @@ class _SigninState extends State<Signin> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Processing Data')),
                               );
+
+                              // Navigate to main1.dart after successful validation
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => const MyApp()),
+                              );
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Please agree to the processing of personal data')),
                               );
                             }
                           },
-                          child: const Text('Sign up'),
+                          child: const Text('Sign In'), // Changed from 'Sign up' to 'Sign in'
                         ),
                       ),
-                      const SizedBox(height: 25.0),
+                      const SizedBox(height: 75.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -158,7 +165,7 @@ class _SigninState extends State<Signin> {
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                             child: Text(
-                              'Sign up with',
+                              'Sign in with',
                               style: TextStyle(color: Colors.black45),
                             ),
                           ),
@@ -170,8 +177,8 @@ class _SigninState extends State<Signin> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 25.0),
-                      const SizedBox(height: 25.0),
+                      const SizedBox(height: 75.0),
+                      const SizedBox(height: 75.0),
                       // Don't have an account
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -188,7 +195,7 @@ class _SigninState extends State<Signin> {
                               );
                             },
                             child: Text(
-                              'Sign up',
+                              'Sign in',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: lightColorScheme.primary,
@@ -197,7 +204,7 @@ class _SigninState extends State<Signin> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20.0),
+                      const SizedBox(height: 80.0),
                     ],
                   ),
                 ),

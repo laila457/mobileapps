@@ -1,39 +1,102 @@
 import 'package:flutter/material.dart';
 
-//import 'package:mobileproject/screens/signup.dart';
-class welcome_button extends StatelessWidget {
-  const welcome_button({super.key, this.buttontext, this.onTap});
-  final String? buttontext;
-  final Widget? onTap;
+// Replace this with your actual sign up screen widget
+class SignUpScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Sign Up')),
+      body: Center(child: Text('Sign Up Screen')),
+    );
+  }
+}
+
+// Replace this with your actual login screen widget
+class LoginScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Login')),
+      body: Center(child: Text('Login Screen')),
+    );
+  }
+}
+
+class WelcomeButtons extends StatelessWidget {
+  const WelcomeButtons({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        WelcomeButton(
+          buttontext: "Sign Up",
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SignUpScreen()),
+            );
+          },
+          color: Colors.orange,
+          textColor: Colors.white, // Assuming you want to set a text color
+        ),
+        SizedBox(height: 10), // Space between buttons
+        WelcomeButton(
+          buttontext: "Login",
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
+          },
+          color: Colors.white,
+          textColor: Colors.black, // Assuming you want to set a text color
+        ),
+        SizedBox(height: 20), // Space below buttons
+        Text(
+          'Forgot your password?',
+          style: TextStyle(color: Colors.black),
+        ),
+      ],
+    );
+  }
+}
+
+class WelcomeButton extends StatelessWidget {
+  const WelcomeButton({
+    super.key,
+    required this.buttontext,
+    required this.onTap,
+    required this.color,
+    required this.textColor,
+  });
+
+  final String buttontext;
+  final VoidCallback onTap; // Change to VoidCallback
+  final Color color;
+  final Color textColor; // Add textColor parameter
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (e) => onTap!,
-          ),
-        );
-      },
+      onTap: onTap, // Call the function directly
       child: Container(
-          padding: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 11, 116, 20),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(50),
-              topRight: Radius.circular(50)
-            ),
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          buttontext,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20.0,
+            color: textColor, // Use the textColor parameter
+            fontWeight: FontWeight.bold,
           ),
-          child: Text(
-            buttontext!,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20.0,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          )),
+        ),
+      ),
     );
   }
 }
