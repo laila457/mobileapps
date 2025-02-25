@@ -3,7 +3,7 @@ import 'package:wellpage/icons_plus/icons_plus.dart';
 import 'package:wellpage/screen/signup.dart';
 import 'package:wellpage/widgets/custom_scaffold.dart';
 import 'package:wellpage/theme/theme.dart';
-import 'package:wellpage/dasboard.dart'; // Import the main1.dart file
+import 'package:wellpage/beranda.dart'; // Import the beranda.dart file
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -138,10 +138,10 @@ class _SigninState extends State<Signin> {
                                 const SnackBar(content: Text('Processing Data')),
                               );
 
-                              // Navigate to main1.dart after successful validation
+                              // Navigate to beranda.dart after successful validation
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => const MyApp()),
+                                MaterialPageRoute(builder: (context) => const Beranda()), // Ganti ke Beranda
                               );
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -149,37 +149,10 @@ class _SigninState extends State<Signin> {
                               );
                             }
                           },
-                          child: const Text('Sign In'), // Changed from 'Sign up' to 'Sign in'
+                          child: const Text('Sign In'),
                         ),
                       ),
                       const SizedBox(height: 75.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.7,
-                              color: Colors.grey.withOpacity(0.5),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                            child: Text(
-                              'Sign in with',
-                              style: TextStyle(color: Colors.black45),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.7,
-                              color: Colors.grey.withOpacity(0.5),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 75.0),
-                      const SizedBox(height: 75.0),
-                      // Don't have an account
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -195,7 +168,7 @@ class _SigninState extends State<Signin> {
                               );
                             },
                             child: Text(
-                              'Sign in',
+                              'Sign up',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: lightColorScheme.primary,

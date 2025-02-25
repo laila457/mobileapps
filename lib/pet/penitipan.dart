@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(PetAdoptionApp());
+  runApp(PenitipanPage());
 }
 
-class PetAdoptionApp extends StatelessWidget {
+class PenitipanPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pet Adoption',
+      title: 'Penitipan',
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),

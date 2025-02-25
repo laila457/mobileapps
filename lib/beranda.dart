@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:wellpage/pet/dasboard.dart';
+import 'package:wellpage/pet/klinik.dart';
+import 'package:wellpage/pet/grooming.dart';
+import 'package:wellpage/pet/penitipan.dart';
+import 'package:wellpage/pet/pacakkucing.dart';
+import 'package:wellpage/pet/penjualan.dart';
 
-void main() {
-  runApp(MyApp());
-}
+class Beranda extends StatelessWidget {
+  const Beranda({super.key});
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Amazon Pet',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,11 +19,72 @@ class HomePage extends StatelessWidget {
           IconButton(icon: Icon(Icons.shopping_cart), onPressed: () {}),
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              child: Text(
+                'Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 0, 213, 125),
+              ),
+            ),
+            ListTile(
+              title: Text('Klinik Hewan'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => KlinikHewanPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Grooming'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => GroomingPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Penitipan'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => PenitipanPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Pacak Kucing'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => PacakKucingPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Penjualan'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => PenjualanPage()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Image.network(
-              'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/pet-shop%2C-poster-design-template-95aae2fd84664bc617c690a903fd4d11_screen.jpg?ts=1680656993', // Ganti dengan URL gambar yang sesuai
+              'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/pet-shop%2C-poster-design-template-95aae2fd84664bc617c690a903fd4d11_screen.jpg?ts=1680656993',
               fit: BoxFit.cover,
             ),
             Padding(

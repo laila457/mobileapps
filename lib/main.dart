@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/screen/welcome.dart';
-import 'package:wellpage/dasboard.dart';
+import 'package:wellpage/beranda.dart';
+import 'package:wellpage/pet/dasboard.dart';
 void main() {
   runApp(const MyApp());
 }
