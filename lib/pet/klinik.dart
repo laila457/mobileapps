@@ -10,7 +10,9 @@ class KlinikHewanPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.network(
-              'https://example.com/clinic_image.png', // Ganti dengan URL gambar klinik
+              'https://media.istockphoto.com/id/1171733307/id/foto/dokter-hewan-dengan-anjing-dan-kucing-anak-anjing-dan-anak-kucing-di-dokter.jpg?s=612x612&w=0&k=20&c=Nr5k3BsjXldM0Lw7u8DFhYbm2hN6VrE0ENG0liZkb5k=', // Ganti dengan URL gambar klinik
+               fit: BoxFit.cover, // Agar gambar menutupi seluruh area yang tersedia
+              width: double.infinity,
               height: 200,
             ),
             SizedBox(height: 16),

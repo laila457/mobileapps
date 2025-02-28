@@ -18,6 +18,23 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      drawer: Drawer( // Provide a Drawer here
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              child: Text(
+                'Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 0, 213, 125),
+              ),
+            ),
+            // Add your drawer items here
+          ],
+        ),
+      ),
       child: Column(
         children: [
           const Expanded(
@@ -199,7 +216,6 @@ class _SignupState extends State<Signup> {
                         ],
                       ),
                       const SizedBox(height: 30.0),
-                      const SizedBox(height: 25.0),
 
                       // Already have an account
                       Row(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomScaffold extends StatelessWidget {
-  const CustomScaffold({super.key, this.child});
+  const CustomScaffold({super.key, this.child, required Drawer drawer});
   final Widget? child;
 
   @override

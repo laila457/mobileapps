@@ -2,22 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:wellpage/app_styles.dart';
 import 'package:wellpage/size_config.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:wellpage/beranda.dart';
 
 void main() {
-  runApp(
-    const MyApp(),
-  );
+  runApp(const Adopted());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class Adopted extends StatefulWidget {
+  const Adopted({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<Adopted> createState() => _AdoptedState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _AdoptedState extends State<Adopted> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -31,6 +29,14 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context); // Kembali ke beranda.dart
+            },
+          ),
+        ),
         body: const HomeScreen(),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: kWhite,

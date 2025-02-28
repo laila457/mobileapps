@@ -3,7 +3,6 @@ import 'package:wellpage/screen/signup.dart';
 import 'package:wellpage/screen/signin.dart';
 import 'package:wellpage/widgets/custom_scaffold.dart';
 import 'package:wellpage/widgets/welcome_button.dart';
-import 'package:wellpage/widgets/custom_scaffold.dart' show CustomScaffold;
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -11,6 +10,41 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      drawer: Drawer( // Add a Drawer here
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              child: Text(
+                'Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 0, 213, 125),
+              ),
+            ),
+            // Add more ListTiles for menu items here
+            ListTile(
+              title: Text('Sign In'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Signin()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Sign Up'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Signup()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       child: Column(
         children: [
           Flexible(
@@ -26,18 +60,18 @@ class WelcomeScreen extends StatelessWidget {
                   text: const TextSpan(
                     children: [
                       TextSpan(
-                        text: ' \n',
+                        text: '\n',
                         style: TextStyle(
                           fontSize: 45.0,
                           fontWeight: FontWeight.w600,
-                          color: Colors.green, // Warna hijau untuk teks
+                          color: Colors.green,
                         ),
                       ),
                       TextSpan(
-                        text: '\n ',
+                        text: '',
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.green, // Warna hijau untuk teks
+                          color: Colors.green,
                         ),
                       ),
                     ],
@@ -61,8 +95,8 @@ class WelcomeScreen extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => Signin()),
                         );
                       },
-                      color: Colors.white, // Warna putih untuk tombol
-                      textColor: Colors.green, // Warna hijau untuk teks tombol
+                      color: Colors.white,
+                      textColor: Colors.green,
                     ),
                   ),
                   Expanded(
@@ -74,8 +108,8 @@ class WelcomeScreen extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => Signup()),
                         );
                       },
-                      color: Colors.white, // Warna putih untuk tombol
-                      textColor: Colors.green, // Warna hijau untuk teks tombol
+                      color: Colors.white,
+                      textColor: Colors.green,
                     ),
                   ),
                 ],

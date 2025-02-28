@@ -19,6 +19,23 @@ class _SigninState extends State<Signin> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      drawer: Drawer( // Provide a Drawer here
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              child: Text(
+                'Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 0, 213, 125),
+              ),
+            ),
+            // Add your drawer items here
+          ],
+        ),
+      ),
       child: Column(
         children: [
           const Expanded(
@@ -133,7 +150,7 @@ class _SigninState extends State<Signin> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_formSignInKey.currentState!.validate() && rememberPassword) {
+                            if (_formSignInKey.currentState!.validate()) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Processing Data')),
                               );
@@ -141,11 +158,7 @@ class _SigninState extends State<Signin> {
                               // Navigate to beranda.dart after successful validation
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => const Beranda()), // Ganti ke Beranda
-                              );
-                            } else if (!rememberPassword) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Please agree to the processing of personal data')),
+                                MaterialPageRoute(builder: (context) => const Beranda()), // Navigate to Beranda
                               );
                             }
                           },

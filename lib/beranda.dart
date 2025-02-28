@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wellpage/pet/dasboard.dart';
+import 'package:wellpage/pet/adopted.dart';
 import 'package:wellpage/pet/klinik.dart';
 import 'package:wellpage/pet/grooming.dart';
 import 'package:wellpage/pet/penitipan.dart';
@@ -19,6 +19,7 @@ class Beranda extends StatelessWidget {
           IconButton(icon: Icon(Icons.shopping_cart), onPressed: () {}),
         ],
       ),
+      
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -65,6 +66,15 @@ class Beranda extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => PacakKucingPage()),
+                );
+              },
+            ),
+                        ListTile(
+              title: Text('Adopsi Hewan'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Adopted()),
                 );
               },
             ),
