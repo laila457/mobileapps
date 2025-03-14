@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class HomeScreens extends StatelessWidget {
+  const HomeScreens({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -21,11 +23,13 @@ class HomeScreens extends StatelessWidget {
 }
 
 class ProfileSection extends StatelessWidget {
+  const ProfileSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Row(
+      padding: const EdgeInsets.all(16.0),
+      child: const Row(
         children: [
           CircleAvatar(
             radius: 50,
@@ -37,7 +41,7 @@ class ProfileSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Nazwa',
+                'PetFans',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               Text('Bio: Gemini'),
@@ -50,11 +54,13 @@ class ProfileSection extends StatelessWidget {
 }
 
 class StatsSection extends StatelessWidget {
+  const StatsSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Row(
+      padding: const EdgeInsets.all(16.0),
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Column(
@@ -100,22 +106,24 @@ class GallerySection extends StatelessWidget {
     'assets/images/cat_marly.png',
   ];
 
+  GallerySection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Gallery',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           GridView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               crossAxisSpacing: 8.0,
               mainAxisSpacing: 8.0,

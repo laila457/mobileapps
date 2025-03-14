@@ -2,22 +2,26 @@ import 'package:flutter/material.dart';
 
 // Replace this with your actual sign up screen widget
 class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sign Up')),
-      body: Center(child: Text('Sign Up Screen')),
+      appBar: AppBar(title: const Text('Sign Up')),
+      body: const Center(child: Text('Sign Up Screen')),
     );
   }
 }
 
 // Replace this with your actual login screen widget
 class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
-      body: Center(child: Text('Login Screen')),
+      appBar: AppBar(title: const Text('Login')),
+      body: const Center(child: Text('Login Screen')),
     );
   }
 }
@@ -41,7 +45,7 @@ class WelcomeButtons extends StatelessWidget {
           color: Colors.orange,
           textColor: Colors.white, // Assuming you want to set a text color
         ),
-        SizedBox(height: 10), // Space between buttons
+        const SizedBox(height: 10), // Space between buttons
         WelcomeButton(
           buttontext: "Login",
           onTap: () {
@@ -53,8 +57,8 @@ class WelcomeButtons extends StatelessWidget {
           color: Colors.white,
           textColor: Colors.black, // Assuming you want to set a text color
         ),
-        SizedBox(height: 20), // Space below buttons
-        Text(
+        const SizedBox(height: 20), // Space below buttons
+        const Text(
           'Forgot your password?',
           style: TextStyle(color: Colors.black),
         ),
@@ -82,7 +86,7 @@ class WelcomeButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap, // Call the function directly
       child: Container(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(20),

@@ -14,31 +14,31 @@ class WelcomeScreen extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 0, 213, 125),
+              ),
               child: Text(
                 'Menu',
                 style: TextStyle(color: Colors.white, fontSize: 24),
               ),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 0, 213, 125),
-              ),
             ),
             // Add more ListTiles for menu items here
             ListTile(
-              title: Text('Sign In'),
+              title: const Text('Sign In'),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Signin()),
+                  MaterialPageRoute(builder: (context) => const Signin()),
                 );
               },
             ),
             ListTile(
-              title: Text('Sign Up'),
+              title: const Text('Sign Up'),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Signup()),
+                  MaterialPageRoute(builder: (context) => const Signup()),
                 );
               },
             ),
@@ -92,7 +92,7 @@ class WelcomeScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Signin()),
+                          MaterialPageRoute(builder: (context) => const Signin()),
                         );
                       },
                       color: Colors.white,
@@ -105,7 +105,7 @@ class WelcomeScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Signup()),
+                          MaterialPageRoute(builder: (context) => const Signup()),
                         );
                       },
                       color: Colors.white,

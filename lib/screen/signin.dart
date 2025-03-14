@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/icons_plus/icons_plus.dart';
+import 'package:wellpage/pet/layanantrue.dart';
 import 'package:wellpage/screen/signup.dart';
 import 'package:wellpage/widgets/custom_scaffold.dart';
 import 'package:wellpage/theme/theme.dart';
-import 'package:wellpage/beranda.dart'; // Import the beranda.dart file
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -22,14 +22,14 @@ class _SigninState extends State<Signin> {
       drawer: Drawer( // Provide a Drawer here
         child: ListView(
           padding: EdgeInsets.zero,
-          children: [
+          children: const [
             DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 0, 213, 125),
+              ),
               child: Text(
                 'Menu',
                 style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 0, 213, 125),
               ),
             ),
             // Add your drawer items here
@@ -158,7 +158,7 @@ class _SigninState extends State<Signin> {
                               // Navigate to beranda.dart after successful validation
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => const Beranda()), // Navigate to Beranda
+                                MaterialPageRoute(builder: (context) => const Layanan1()), // Navigate to Beranda
                               );
                             }
                           },

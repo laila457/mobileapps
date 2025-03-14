@@ -21,14 +21,14 @@ class _SignupState extends State<Signup> {
       drawer: Drawer( // Provide a Drawer here
         child: ListView(
           padding: EdgeInsets.zero,
-          children: [
+          children: const [
             DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 0, 213, 125),
+              ),
               child: Text(
                 'Menu',
                 style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 0, 213, 125),
               ),
             ),
             // Add your drawer items here
@@ -232,7 +232,7 @@ class _SignupState extends State<Signup> {
                                 MaterialPageRoute(builder: (e) => const Signin()),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               'Sign in',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
