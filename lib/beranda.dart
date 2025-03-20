@@ -39,7 +39,7 @@ class Beranda extends StatelessWidget {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Bookingform()),
+                  MaterialPageRoute(builder: (context) => BookingForm()),
                 );
               },
             ),
@@ -48,7 +48,7 @@ class Beranda extends StatelessWidget {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Layanan1()),
+                  MaterialPageRoute(builder: (context) => const Layanan1(name: null,)),
                 );
               },
             ),
@@ -84,7 +84,7 @@ class Beranda extends StatelessWidget {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreens()),
+                  MaterialPageRoute(builder: (context) => const HomeScreens()),
                 );
               },
             ),
@@ -98,26 +98,26 @@ class Beranda extends StatelessWidget {
               'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/pet-shop%2C-poster-design-template-95aae2fd84664bc617c690a903fd4d11_screen.jpg?ts=1680656993',
               fit: BoxFit.cover,
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Selamat Datang di Amazon Pet',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
+                  SizedBox(height: 16),
+                  Text(
                     'Kami menyediakan berbagai produk terbaik untuk hewan peliharaan Anda.',
                     style: TextStyle(fontSize: 16),
                   ),
-                  const SizedBox(height: 24),
-                  const Text(
+                  SizedBox(height: 24),
+                  Text(
                     'Produk Unggulan',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   ProductCard(title: 'Makanan Kucing', price: 'Rp 100.000'),
                   ProductCard(title: 'Mainan Anjing', price: 'Rp 50.000'),
                   ProductCard(title: 'Kandang Kucing', price: 'Rp 300.000'),

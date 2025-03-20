@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wellpage/pet/formbook2.dart';
 import 'grooming2.dart'; // Import the GroomingPage
 import 'penitipan.dart'; // Import the PenitipanPage
 
@@ -104,15 +105,16 @@ class Dash extends StatelessWidget {
                 ],
               ),
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple[300],
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-                child: Text('Pesan Sekarang'),
-              ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BookingForm()),
+                );
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 185, 119, 226)),
+              child: const Text('Pesan Sekarang'),
             ),
           ],
         ),

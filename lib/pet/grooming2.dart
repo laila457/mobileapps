@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wellpage/pet/formbook2.dart';
 import 'dasboard.dart';
 
 class GroomingsPage extends StatelessWidget {
@@ -50,16 +51,16 @@ class GroomingsPage extends StatelessWidget {
               '“Layanan Grooming kucing di Shiroo Petshop memastikan kucingmu tetap bersih dan wangi! Dengan tenaga profesional dan produk terbaik, kami menjamin pengalaman grooming terbaik untuk hewan kesayangan.”',
               style: TextStyle(color: Colors.grey[600], fontStyle: FontStyle.italic),
             ),
-            const SizedBox(height: 20),
+const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Dash()),
+                  MaterialPageRoute(builder: (context) => BookingForm()),
                 );
               },
               style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 185, 119, 226)),
-              child: Text('Pesan Sekarang'),
+              child: const Text('Pesan Sekarang'),
             ),
           ],
         ),

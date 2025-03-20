@@ -19,7 +19,8 @@ class _SigninState extends State<Signin> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      drawer: Drawer( // Provide a Drawer here
+      drawer: Drawer(
+        // Provide a Drawer here
         child: ListView(
           padding: EdgeInsets.zero,
           children: const [
@@ -152,13 +153,17 @@ class _SigninState extends State<Signin> {
                           onPressed: () {
                             if (_formSignInKey.currentState!.validate()) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Processing Data')),
+                                const SnackBar(
+                                    content: Text('Processing Data')),
                               );
 
-                              // Navigate to beranda.dart after successful validation
+                              // Navigate to Layanan1 with the required name parameter
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => const Layanan1()), // Navigate to Beranda
+                                MaterialPageRoute(
+                                    builder: (context) => const Layanan1(
+                                        name:
+                                            "Your Name")), // Navigate to Beranda
                               );
                             }
                           },
@@ -177,7 +182,8 @@ class _SigninState extends State<Signin> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (e) => const Signup()),
+                                MaterialPageRoute(
+                                    builder: (e) => const Signup()),
                               );
                             },
                             child: Text(

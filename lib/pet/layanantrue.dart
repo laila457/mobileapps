@@ -3,24 +3,24 @@ import 'package:wellpage/pet/dasboard.dart';
 import 'package:wellpage/pet/grooming2.dart';
 import 'package:wellpage/pet/penitipan.dart';
 import 'package:wellpage/pet/formbook2.dart';
+
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Layanan1(),
+      home: Layanan1(name: null,),
     );
   }
 }
 
 class Layanan1 extends StatelessWidget {
-  const Layanan1({super.key});
+  const Layanan1({super.key, required name});
 
   @override
   Widget build(BuildContext context) {
@@ -79,23 +79,16 @@ class Layanan1 extends StatelessWidget {
               '🔊 Untuk layanan penitipan, hewan harus dijadwalkan 1 minggu sebelumnya.',
               style: TextStyle(fontSize: 14),
             ),
-            const SizedBox(height: 10),
-            const SizedBox(
-              child: Text(
-                '',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            const SizedBox(height: 20),
+const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Bookingform()),
+                  MaterialPageRoute(builder: (context) => BookingForm()),
                 );
               },
               style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 185, 119, 226)),
-              child: Text('Pesan Sekarang'),
+              child: const Text('Pesan Sekarang'),
             ),
           ],
         ),
