@@ -14,17 +14,17 @@ class MyApp extends StatelessWidget {
       title: 'Pilih Layanan',
       theme: ThemeData(
         primarySwatch: Colors.purple,
-        scaffoldBackgroundColor: Styles.backgroundColor, // Apply background color
+        scaffoldBackgroundColor: Styless.backgroundColor, // Apply background color
         appBarTheme: AppBarTheme(
-          backgroundColor: Styles.appBarColor, // Apply app bar color
+          backgroundColor: Styless.appBarColor, // Apply app bar color
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Styles.buttonColor, // Apply button color
+            backgroundColor: Styless.buttonColor, // Apply button color
           ),
         ),
         textSelectionTheme: TextSelectionThemeData(
-          cursorColor: Styles.highlightColor, // Apply cursor color
+          cursorColor: Styless.highlightColor, // Apply cursor color
         ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
             borderSide: BorderSide(color: Colors.grey),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Styles.highlightColor),
+            borderSide: BorderSide(color: Styless.highlightColor),
           ),
         ),
         textTheme: TextTheme(
@@ -42,17 +42,17 @@ class MyApp extends StatelessWidget {
           titleLarge: TextStyle(color: Colors.white),
         ),
       ),
-      home: BookingForm(),
+      home: FormBook(),
     );
   }
 }
 
-class BookingForm extends StatefulWidget {
+class FormBook extends StatefulWidget {
   @override
-  _BookingFormState createState() => _BookingFormState();
+  _FormBookState createState() => _FormBookState();
 }
 
-class _BookingFormState extends State<BookingForm> {
+class _FormBookState extends State<FormBook> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
@@ -71,12 +71,12 @@ class _BookingFormState extends State<BookingForm> {
         return Theme(
           data: ThemeData.dark().copyWith(
             colorScheme: ColorScheme.dark(
-              primary: Styles.highlightColor, // Apply highlight color to time picker
+              primary: Styless.highlightColor, // Apply highlight color to time picker
               onPrimary: Colors.white,
-              surface: Styles.appBarColor,
+              surface: Styless.appBarColor,
               onSurface: Colors.white,
             ),
-            dialogBackgroundColor: Styles.backgroundColor,
+            dialogBackgroundColor: Styless.backgroundColor,
           ),
           child: child!,
         );
@@ -100,7 +100,7 @@ class _BookingFormState extends State<BookingForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Pilih Tanggal', style: TextStyle(fontSize: 18)),
+            Text('Pilih Tanggal', style: TextStyle(fontSize: 18, color: Colors.white)),
             Center(
               child: CalendarTimeline(
                 initialDate: selectedDate,
@@ -118,16 +118,17 @@ class _BookingFormState extends State<BookingForm> {
             ),
             SizedBox(height: 20),
             Text(
-                'Tanggal Terpilih: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
-                style: TextStyle(fontSize: 16)),
+              'Tanggal Terpilih: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
             SizedBox(height: 20),
-            Text('Pilih Waktu', style: TextStyle(fontSize: 18)),
+            Text('Pilih Waktu', style: TextStyle(fontSize: 18, color: Colors.white)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   '${selectedTime.hour}:${selectedTime.minute.toString().padLeft(2, '0')}',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
                 ElevatedButton(
                   onPressed: () => _selectTime(context),
@@ -136,7 +137,7 @@ class _BookingFormState extends State<BookingForm> {
               ],
             ),
             SizedBox(height: 20),
-            Text('Data pelanggan yang harus diisi!'),
+            Text('Data pelanggan yang harus diisi!', style: TextStyle(fontSize: 18, color: Colors.white)),
             TextField(
               decoration: InputDecoration(labelText: 'Nama Pemilik'),
             ),

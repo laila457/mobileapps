@@ -4,8 +4,8 @@ Color gradient1 = const Color(0xFF8573D2);
 Color gradient2 = const Color(0xFF52448D);
 Color background = const Color(0xFF1D192A);
 
-class Styles {
-  Styles._();
+class Styless {
+  Styless._();
 
   static Color gradient1Color = gradient1;
   static Color gradient2Color = gradient2;
