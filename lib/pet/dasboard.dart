@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wellpage/controllers/login_screen.dart';
 import 'package:wellpage/pet/formbook2.dart';
+import 'package:wellpage/pet/layanantrue.dart';
 import 'grooming2.dart'; // Import the GroomingPage
 import 'penitipan.dart'; // Import the PenitipanPage
+
 
 void main() {
   runApp(MaterialApp(
@@ -18,8 +21,23 @@ void main() {
   ));
 }
 
-class Dash extends StatelessWidget {
+class Dash extends StatefulWidget {
   const Dash({super.key});
+
+  @override
+  _DashState createState() => _DashState();
+}
+
+class _DashState extends State<Dash> {
+  final PageController _pageController = PageController();
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _pageController.jumpToPage(index); // Use jumpToPage instead of animateToPage for instant switch
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,96 +46,131 @@ class Dash extends StatelessWidget {
         title: const Text('Welcome to Happy Paws'),
         backgroundColor: Colors.purple[300],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'memberikan pengalaman yang menyenangkan dan bebas stres hewan kesayangan.',
-              style: TextStyle(fontSize: 16, color: Colors.purple[800]),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Telusuri...',
-                prefixIcon: Icon(Icons.search, color: Colors.purple[300]),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(color: Colors.purple[300]!),
-                ),
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(), // Disable swipe to change pages
+        children: [
+          _buildHomePage(context), // Home Page
+          FormBook(), // Replace with your actual ChatPage widget
+          PenitipanPage(), // Replace with your actual NewPostPage widget
+          LoginScreen(), // Replace with your actual Signin widget
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'New Post',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  Widget _buildHomePage(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'memberikan pengalaman yang menyenangkan dan bebas stres hewan kesayangan.',
+            style: TextStyle(fontSize: 16, color: Colors.purple[800]),
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            decoration: InputDecoration(
+              hintText: 'Telusuri...',
+              prefixIcon: Icon(Icons.search, color: Colors.purple[300]),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(color: Colors.purple[300]!),
               ),
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Layanan',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purple[800]),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Layanan',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purple[800]),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ServiceCard(
+                title: 'Grooming',
+                icon: Icons.pets,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GroomingsPage()),
+                  );
+                },
+              ),
+              ServiceCard(
+                title: 'Penitipan',
+                icon: Icons.house,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PenitipanPage()),
+                  );
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Booking Anda',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purple[800]),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: ListView(
               children: [
-                ServiceCard(
-                  title: 'Grooming',
-                  icon: Icons.pets,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => GroomingsPage()),
-                    );
-                  },
+                BookingCard(
+                  title: 'Grooming - Paket Basic',
+                  date: 'Selasa, 2 Feb 2025',
+                  time: '14.00 - 15.00',
+                  price: 'Rp 60.000 - QRIS',
+                  pets: 'Milo - Kucing Persia Max - Golden',
                 ),
-                ServiceCard(
-                  title: 'Penitipan',
-                  icon: Icons.house,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const PenitipanPage()),
-                    );
-                  },
+                BookingCard(
+                  title: 'Grooming - Paket Basic',
+                  date: 'Selasa, 2 Feb 2025',
+                  time: '14.00 - 15.00',
+                  price: 'Rp 60.000 - QRIS',
+                  pets: 'Milo - Kucing Persia Max - Golden',
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Booking Anda',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purple[800]),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView(
-                children: [
-                  BookingCard(
-                    title: 'Grooming - Paket Basic',
-                    date: 'Selasa, 2 Feb 2025',
-                    time: '14.00 - 15.00',
-                    price: 'Rp 60.000 - QRIS',
-                    pets: 'Milo - Kucing Persia Max - Golden',
-                  ),
-                  BookingCard(
-                    title: 'Grooming - Paket Basic',
-                    date: 'Selasa, 2 Feb 2025',
-                    time: '14.00 - 15.00',
-                    price: 'Rp 60.000 - QRIS',
-                    pets: 'Milo - Kucing Persia Max - Golden',
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FormBook()),
-                );
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 185, 119, 226)),
-              child: const Text('Pesan Sekarang'),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Layanan1()),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 185, 119, 226)),
+            child: const Text('Pesan Sekarang'),
+          ),
+        ],
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wellpage/theme/theme.dart';
 import 'package:wellpage/widgets/custom_scaffold.dart';
 import 'package:wellpage/screen/signin.dart';
+import '../controllers/auth_controller.dart'; // Ensure this path is correct
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -13,11 +14,45 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   final _formSignupKey = GlobalKey<FormState>();
   bool agreePersonalData = true;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final AuthController authController = AuthController(); // Instance of AuthController
+
+  void register() async {
+    if (_formSignupKey.currentState!.validate() && agreePersonalData) {
+      final response = await authController.register(
+        nameController.text,
+        emailController.text,
+        passwordController.text,
+      );
+
+      // Show feedback based on registration success or failure
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response['message']),
+          backgroundColor: response['status'] == 'success' ? Colors.green : Colors.red,
+        ),
+      );
+
+      // Optional: Navigate to Signin after successful registration
+      if (response['status'] == 'success') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Signin()),
+        );
+      }
+    } else if (!agreePersonalData) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please agree to the processing of personal data')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      drawer: Drawer( // Provide a Drawer here
+      drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: const [
@@ -30,16 +65,12 @@ class _SignupState extends State<Signup> {
                 style: TextStyle(color: Colors.white, fontSize: 24),
               ),
             ),
-            // Add your drawer items here
           ],
         ),
       ),
       child: Column(
         children: [
-          const Expanded(
-            flex: 1,
-            child: SizedBox(height: 10),
-          ),
+          const Expanded(flex: 1, child: SizedBox(height: 10)),
           Expanded(
             flex: 7,
             child: Container(
@@ -57,7 +88,6 @@ class _SignupState extends State<Signup> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Get Started Text
                       Text(
                         'Get Started',
                         style: TextStyle(
@@ -70,6 +100,7 @@ class _SignupState extends State<Signup> {
 
                       // Full Name
                       TextFormField(
+                        controller: nameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Full Name';
@@ -84,16 +115,13 @@ class _SignupState extends State<Signup> {
                             borderSide: const BorderSide(color: Color.fromARGB(52, 145, 237, 189)),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
                         ),
                       ),
                       const SizedBox(height: 25.0),
 
                       // Email
                       TextFormField(
+                        controller: emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
@@ -108,16 +136,13 @@ class _SignupState extends State<Signup> {
                             borderSide: const BorderSide(color: Colors.black12),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
                         ),
                       ),
                       const SizedBox(height: 25.0),
 
                       // Password
                       TextFormField(
+                        controller: passwordController,
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value) {
@@ -131,10 +156,6 @@ class _SignupState extends State<Signup> {
                           hintText: 'Enter Password',
                           hintStyle: const TextStyle(color: Colors.black26),
                           border: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.black12),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -173,17 +194,7 @@ class _SignupState extends State<Signup> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_formSignupKey.currentState!.validate() && agreePersonalData) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Processing Data')),
-                              );
-                            } else if (!agreePersonalData) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Please agree to the processing of personal data')),
-                              );
-                            }
-                          },
+                          onPressed: register, // Call the register function
                           child: const Text('Sign up'),
                         ),
                       ),

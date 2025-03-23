@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           backgroundColor: Styless.appBarColor, // Apply app bar color
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(   
+        elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: Styless.buttonColor, // Apply button color
           ),
@@ -45,17 +45,17 @@ class MyApp extends StatelessWidget {
           titleLarge: TextStyle(color: Colors.white),
         ),
       ),
-      home: Layanan(),
+      home: Layanan1(),
     );
   }
 }
 
-class Layanan extends StatefulWidget {
+class Layanantrue extends StatefulWidget {
   @override
-  _LayananState createState() => _LayananState();
+  _LayanantrueState createState() => _LayanantrueState();
 }
 
-class _LayananState extends State<Layanan> {
+class _LayanantrueState extends State<Layanantrue> {
   final PageController _pageController = PageController();
   int _selectedIndex = 0;
 

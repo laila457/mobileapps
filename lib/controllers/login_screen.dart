@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wellpage/pet/layanantrue.dart';
 import '../controllers/auth_controller.dart';
 import 'register.dart';
+import 'package:wellpage/pet/dasboard.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -21,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Layanan1(name: response['name']),
+          builder: (context) => Dash(),
         ),
       );
     } else {

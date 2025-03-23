@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wellpage/pet/dasboard.dart';
 import 'package:wellpage/pet/layanantrue.dart';
 import 'package:wellpage/screen/signup.dart';
 import 'package:wellpage/widgets/custom_scaffold.dart';
 import 'package:wellpage/theme/theme.dart';
+import 'package:wellpage/controllers/auth_controller.dart';  // Make sure this path is correct
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -13,13 +15,35 @@ class Signin extends StatefulWidget {
 
 class _SigninState extends State<Signin> {
   final _formSignInKey = GlobalKey<FormState>();
+  final AuthController authController = AuthController(); // Instance of AuthController
   bool rememberPassword = true;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void login() async {
+    if (_formSignInKey.currentState!.validate()) {
+      final response = await authController.login(
+        emailController.text,
+        passwordController.text,
+      );
+
+      if (response['status'] == 'success') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Dash()), // Navigate to Dash
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Login Failed: ${response['message']}"), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       drawer: Drawer(
-        // Provide a Drawer here
         child: ListView(
           padding: EdgeInsets.zero,
           children: const [
@@ -32,16 +56,12 @@ class _SigninState extends State<Signin> {
                 style: TextStyle(color: Colors.white, fontSize: 24),
               ),
             ),
-            // Add your drawer items here
           ],
         ),
       ),
       child: Column(
         children: [
-          const Expanded(
-            flex: 1,
-            child: SizedBox(height: 80),
-          ),
+          const Expanded(flex: 1, child: SizedBox(height: 80)),
           Expanded(
             flex: 7,
             child: Container(
@@ -69,6 +89,7 @@ class _SigninState extends State<Signin> {
                       ),
                       const SizedBox(height: 80.0),
                       TextFormField(
+                        controller: emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
@@ -83,14 +104,11 @@ class _SigninState extends State<Signin> {
                             borderSide: const BorderSide(color: Colors.black12),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
                         ),
                       ),
                       const SizedBox(height: 75.0),
                       TextFormField(
+                        controller: passwordController,
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value) {
@@ -107,65 +125,13 @@ class _SigninState extends State<Signin> {
                             borderSide: const BorderSide(color: Colors.black12),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
                         ),
-                      ),
-                      const SizedBox(height: 75.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: rememberPassword,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    rememberPassword = value!;
-                                  });
-                                },
-                                activeColor: lightColorScheme.primary,
-                              ),
-                              const Text(
-                                'Remember me',
-                                style: TextStyle(color: Colors.black45),
-                              ),
-                            ],
-                          ),
-                          GestureDetector(
-                            child: Text(
-                              'Forget password?',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: lightColorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                       const SizedBox(height: 75.0),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_formSignInKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Processing Data')),
-                              );
-
-                              // Navigate to Layanan1 with the required name parameter
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Layanan1(
-                                        name:
-                                            "Your Name")), // Navigate to Beranda
-                              );
-                            }
-                          },
+                          onPressed: login, // Call the login function
                           child: const Text('Sign In'),
                         ),
                       ),
@@ -181,8 +147,7 @@ class _SigninState extends State<Signin> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (e) => const Signup()),
+                                MaterialPageRoute(builder: (e) => const Signup()),
                               );
                             },
                             child: Text(

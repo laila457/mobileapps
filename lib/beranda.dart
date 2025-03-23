@@ -47,7 +47,7 @@ class Beranda extends StatelessWidget {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const Layanan1(name: null,)),
+                  MaterialPageRoute(builder: (context) => Layanan1()),
                 );
               },
             ),

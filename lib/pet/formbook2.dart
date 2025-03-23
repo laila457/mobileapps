@@ -14,17 +14,17 @@ class MyApp extends StatelessWidget {
       title: 'Pilih Layanan',
       theme: ThemeData(
         primarySwatch: Colors.purple,
-        scaffoldBackgroundColor: Styless.backgroundColor, // Apply background color
+        scaffoldBackgroundColor: Styless.backgroundColor,
         appBarTheme: AppBarTheme(
-          backgroundColor: Styless.appBarColor, // Apply app bar color
+          backgroundColor: Styless.appBarColor,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Styless.buttonColor, // Apply button color
+            backgroundColor: Styless.buttonColor,
           ),
         ),
         textSelectionTheme: TextSelectionThemeData(
-          cursorColor: Styless.highlightColor, // Apply cursor color
+          cursorColor: Styless.highlightColor,
         ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         textTheme: TextTheme(
-          bodyMedium: TextStyle(color: Colors.white), // Apply text color
+          bodyMedium: TextStyle(color: Colors.white),
           bodyLarge: TextStyle(color: Colors.white),
           titleMedium: TextStyle(color: Colors.white),
           titleLarge: TextStyle(color: Colors.white),
@@ -59,7 +59,7 @@ class _FormBookState extends State<FormBook> {
   void _onDateSelected(DateTime date) {
     setState(() {
       selectedDate = date;
-      log(date.toString());
+      log('Selected date: ${date.toString()}');
     });
   }
 
@@ -71,7 +71,7 @@ class _FormBookState extends State<FormBook> {
         return Theme(
           data: ThemeData.dark().copyWith(
             colorScheme: ColorScheme.dark(
-              primary: Styless.highlightColor, // Apply highlight color to time picker
+              primary: Styless.highlightColor,
               onPrimary: Colors.white,
               surface: Styless.appBarColor,
               onSurface: Colors.white,
@@ -85,6 +85,7 @@ class _FormBookState extends State<FormBook> {
     if (picked != null && picked != selectedTime) {
       setState(() {
         selectedTime = picked;
+        log('Selected time: ${picked.hour}:${picked.minute}');
       });
     }
   }
@@ -107,11 +108,12 @@ class _FormBookState extends State<FormBook> {
                 firstDate: DateTime(2019, 1, 15),
                 lastDate: DateTime.now(),
                 onDateSelected: _onDateSelected,
-                monthColor: Colors.white, // Set month color to white
-                dayColor: Colors.white, // Set day color to white
+                monthColor: Colors.white,
+                dayColor: Colors.white,
                 activeDayColor: Colors.white,
                 activeBackgroundDayColor: Colors.transparent,
                 dotsColor: Colors.white.withOpacity(0.4),
+                // Ensure the initialDate is valid
                 selectableDayPredicate: (date) => date.day != 23,
                 locale: 'en_ISO',
               ),
@@ -139,19 +141,19 @@ class _FormBookState extends State<FormBook> {
             SizedBox(height: 20),
             Text('Data pelanggan yang harus diisi!', style: TextStyle(fontSize: 18, color: Colors.white)),
             TextField(
-              decoration: InputDecoration(labelText: 'Nama Pemilik'),
+              decoration: InputDecoration(labelText: 'Nama Pemilik', filled: true),
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'No. Hp'),
+              decoration: InputDecoration(labelText: 'No. Hp', filled: true),
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Total Hewan'),
+              decoration: InputDecoration(labelText: 'Total Hewan', filled: true),
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Jenis Hewan'),
+              decoration: InputDecoration(labelText: 'Jenis Hewan', filled: true),
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Catatan'),
+              decoration: InputDecoration(labelText: 'Catatan', filled: true),
             ),
             SizedBox(height: 20),
             ElevatedButton(
