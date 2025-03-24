@@ -16,7 +16,7 @@ class WelcomeScreen extends StatelessWidget {
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 0, 213, 125),
+                color: Color.fromARGB(255, 211, 47, 208),
               ),
               child: Text(
                 'Menu',
@@ -64,14 +64,14 @@ class WelcomeScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 45.0,
                           fontWeight: FontWeight.w600,
-                          color: Colors.green,
+                          color: Colors.purple,
                         ),
                       ),
                       TextSpan(
                         text: '',
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.green,
+                          color: Colors.purple,
                         ),
                       ),
                     ],
@@ -96,7 +96,7 @@ class WelcomeScreen extends StatelessWidget {
                         );
                       },
                       color: Colors.white,
-                      textColor: Colors.green,
+                      textColor: Colors.purple,
                     ),
                   ),
                   Expanded(
@@ -109,7 +109,7 @@ class WelcomeScreen extends StatelessWidget {
                         );
                       },
                       color: Colors.white,
-                      textColor: Colors.green,
+                      textColor: Colors.purple,
                     ),
                   ),
                 ],

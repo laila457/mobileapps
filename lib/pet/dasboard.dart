@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/controllers/login_screen.dart';
+import 'package:wellpage/pet/booking.dart';
 import 'package:wellpage/pet/formbook2.dart';
 import 'package:wellpage/pet/layanantrue.dart';
+import 'package:wellpage/screen/welcome.dart';
 import 'grooming2.dart'; // Import the GroomingPage
 import 'penitipan.dart'; // Import the PenitipanPage
 
@@ -51,9 +53,9 @@ class _DashState extends State<Dash> {
         physics: const NeverScrollableScrollPhysics(), // Disable swipe to change pages
         children: [
           _buildHomePage(context), // Home Page
-          FormBook(), // Replace with your actual ChatPage widget
+          BookingPage(), // Replace with your actual ChatPage widget
           PenitipanPage(), // Replace with your actual NewPostPage widget
-          LoginScreen(), // Replace with your actual Signin widget
+          WelcomeScreen(), // Replace with your actual Signin widget
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wellpage/pet/booking.dart';
 import 'package:wellpage/pet/dasboard.dart';
 import 'package:wellpage/pet/grooming2.dart';
 import 'package:wellpage/pet/penitipan.dart';
 import 'package:wellpage/pet/formbook2.dart';
 import 'package:wellpage/pet/stylebook.dart';
+import 'package:wellpage/screen/welcome.dart';
 import 'package:wellpage/widgets/welcome_button.dart';
 
 void main() {
@@ -79,9 +81,9 @@ class _LayanantrueState extends State<Layanantrue> {
         physics: NeverScrollableScrollPhysics(),
         children: [
           Layanan1(), // First Page
-          FormBook(), // Replace with your actual ChatPage widget
+          BookingPage(), // Replace with your actual ChatPage widget
           PenitipanPage(), // Replace with your actual NewPostPage widget
-          LoginScreen(), // Replace with your actual Signin widget
+          WelcomeScreen(), // Replace with your actual Signin widget
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -177,7 +179,7 @@ class Layanan1 extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FormBook()),
+                  MaterialPageRoute(builder: (context) => BookingPage()),
                 );
               },
               child: const Text('Pesan Sekarang'),

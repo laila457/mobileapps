@@ -1,6 +1,9 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:wellpage/pet/detailbook.dart';
+import 'package:wellpage/pet/navigator.dart';
 void main() {
   runApp(MyApp());
 }
@@ -25,7 +28,8 @@ class BookingPage extends StatefulWidget {
 
 class _BookingPageState extends State<BookingPage> {
   String? selectedMonth;
-  DateTime? selectedDate;
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
   String? selectedPackage;
   String? name;
   String? phone;
@@ -57,6 +61,37 @@ class _BookingPageState extends State<BookingPage> {
     'Kucing',
   ];
 
+  void _onDateSelected(DateTime date) {
+    setState(() {
+      selectedDate = date;
+      log('Selected date: ${date.toString()}');
+    });
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.purple,
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            colorScheme: ColorScheme.light(primary: Colors.purple)
+                .copyWith(secondary: Colors.purple),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != selectedTime) {
+      setState(() {
+        selectedTime = picked;
+        log('Selected time: ${picked.hour}:${picked.minute}');
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +106,10 @@ class _BookingPageState extends State<BookingPage> {
           children: [
             Text(
               'Pilih Bulan',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purple[800]),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple[800]),
             ),
             DropdownButton<String>(
               hint: Text('Select Month'),
@@ -91,22 +129,51 @@ class _BookingPageState extends State<BookingPage> {
             SizedBox(height: 16),
             Text(
               'Pilih Tanggal',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purple[800]),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple[800]),
             ),
-            CalendarDatePicker(
-              initialDate: DateTime.now(),
+            CalendarTimeline(
+              initialDate: selectedDate,
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(Duration(days: 30)),
-              onDateChanged: (DateTime date) {
-                setState(() {
-                  selectedDate = date;
-                });
-              },
+              onDateSelected: _onDateSelected,
+              monthColor: Colors.black,
+              dayColor: Colors.black,
+              activeDayColor: Colors.white,
+              activeBackgroundDayColor: Colors.purple[700],
+              dotsColor: Colors.white.withOpacity(0.4),
+              locale: 'en_ISO',
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 20),
+            Text(
+              'Tanggal Terpilih: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            ),
+            SizedBox(height: 20),
+            Text('Pilih Waktu',
+                style: TextStyle(fontSize: 18, color: Colors.black)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${selectedTime.hour}:${selectedTime.minute.toString().padLeft(2, '0')}',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+                ElevatedButton(
+                  onPressed: () => _selectTime(context),
+                  child: Text('Pilih Waktu'),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
             Text(
               'Data Pelanggan',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purple[800]),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple[800]),
             ),
             TextField(
               decoration: InputDecoration(
@@ -131,6 +198,17 @@ class _BookingPageState extends State<BookingPage> {
                 });
               },
             ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Alamat',
+                prefixIcon: Icon(Icons.map, color: Colors.purple[700]),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  name = value;
+                });
+              },
+            ),
             DropdownButton<String>(
               hint: Text('Jenis Hewan'),
               value: animalType,
@@ -149,7 +227,10 @@ class _BookingPageState extends State<BookingPage> {
             SizedBox(height: 16),
             Text(
               'Pilih Paket',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purple[800]),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple[800]),
             ),
             DropdownButton<String>(
               hint: Text('Select Package'),
@@ -168,28 +249,39 @@ class _BookingPageState extends State<BookingPage> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                // Handle the booking submission
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('Pesanan Diterima'),
-                      content: Text('Terima kasih, $name! Booking Anda sudah diterima.'),
-                      actions: [
-                        TextButton(
-                          child: Text('OK'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
+              onPressed: () async {
+                if (name != null &&
+                    phone != null &&
+                    selectedMonth != null &&
+                    selectedDate != null &&
+                    animalType != null &&
+                    selectedPackage != null) {
+                  // Save booking to Firestore
+                  await FirebaseFirestore.instance.collection('bookings').add({
+                    'name': name,
+                    'phone': phone,
+                    'month': selectedMonth,
+                    'date': selectedDate.toIso8601String(),
+                    'time': '${selectedTime.hour}:${selectedTime.minute}',
+                    'animalType': animalType,
+                    'package': selectedPackage,
+                  });
+
+                  // Navigate to BookingHistory
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BookingHistory()),
+                  );
+                } else {
+                  // Show error message if fields are not filled
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Please fill all fields!'),
+                  ));
+                }
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Colors.purple[700],
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.purple[700],
               ),
               child: Text('Selesaikan Pemesanan'),
             ),

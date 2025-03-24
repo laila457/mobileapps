@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthController {
-  final String baseUrl = "http://192.168.100.142/api";
+  final String baseUrl = "http://20.60.20.242/api";
   Future<bool> checkServerConnection() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/health_check.php'));

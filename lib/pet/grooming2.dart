@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wellpage/pet/booking.dart';
 import 'package:wellpage/pet/formbook2.dart';
 
 class GroomingsPage extends StatelessWidget {
@@ -55,7 +56,7 @@ const SizedBox(height: 20),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FormBook()),
+                  MaterialPageRoute(builder: (context) => BookingPage()),
                 );
               },
               style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 185, 119, 226)),
