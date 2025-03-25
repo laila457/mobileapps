@@ -26,12 +26,12 @@ class Navigation extends StatelessWidget {
           label: 'Beranda',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.chat),
-          label: 'Pesan',
+          icon: Icon(Icons.book),
+          label: 'Booking',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.add),
-          label: 'Upload',
+          icon: Icon(Icons.local_library),
+          label: 'Penitipan',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.logout),
@@ -39,5 +39,6 @@ class Navigation extends StatelessWidget {
         ),
       ],
     );
+    
   }
 }

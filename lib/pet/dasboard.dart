@@ -3,16 +3,16 @@ import 'package:wellpage/controllers/login_screen.dart';
 import 'package:wellpage/pet/booking.dart';
 import 'package:wellpage/pet/formbook2.dart';
 import 'package:wellpage/pet/layanantrue.dart';
+import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/screen/welcome.dart';
 import 'grooming2.dart'; // Import the GroomingPage
 import 'penitipan.dart'; // Import the PenitipanPage
-
 
 void main() {
   runApp(MaterialApp(
     title: 'Happy Paws',
     theme: ThemeData(
-      primarySwatch: Colors.purple,
+      primarySwatch: Colors.deepPurple,
       scaffoldBackgroundColor: Colors.white,
       textTheme: const TextTheme(
         bodyLarge: TextStyle(fontFamily: 'Comic Sans MS', fontSize: 16),
@@ -37,7 +37,8 @@ class _DashState extends State<Dash> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      _pageController.jumpToPage(index); // Use jumpToPage instead of animateToPage for instant switch
+      _pageController.jumpToPage(
+          index); // Use jumpToPage instead of animateToPage for instant switch
     });
   }
 
@@ -45,17 +46,18 @@ class _DashState extends State<Dash> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome to Happy Paws'),
+        title: const Text(''),
         backgroundColor: Colors.purple[300],
       ),
       body: PageView(
         controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(), // Disable swipe to change pages
+        physics:
+            const NeverScrollableScrollPhysics(), // Disable swipe to change pages
         children: [
           _buildHomePage(context), // Home Page
           BookingPage(), // Replace with your actual ChatPage widget
           PenitipanPage(), // Replace with your actual NewPostPage widget
-          WelcomeScreen(), // Replace with your actual Signin widget
+          HomeScreens(),//ual Signin widget
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -65,12 +67,12 @@ class _DashState extends State<Dash> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chat',
+            icon: Icon(Icons.book),
+            label: 'Booking',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'New Post',
+            icon: Icon(Icons.local_library),
+            label: 'Penitipan',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -79,6 +81,7 @@ class _DashState extends State<Dash> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        selectedItemColor: Colors.purple[300],
       ),
     );
   }
@@ -89,9 +92,24 @@ class _DashState extends State<Dash> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'memberikan pengalaman yang menyenangkan dan bebas stres hewan kesayangan.',
-            style: TextStyle(fontSize: 16, color: Colors.purple[800]),
+          Center(
+            child: Text(
+              'Welcome To Happy Paws',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold, // Make text bold
+                color: const Color.fromARGB(255, 4, 4, 4),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          // Add the image asset below the welcome text
+          Center(
+            child: Image.asset(
+              '../assets/images/dash.png',
+              width: 200,// a smaller width
+              height: 200,//et a smaller height
+            ),
           ),
           const SizedBox(height: 20),
           TextField(
@@ -107,7 +125,10 @@ class _DashState extends State<Dash> {
           const SizedBox(height: 20),
           Text(
             'Layanan',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purple[800]),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.purple[800]),
           ),
           const SizedBox(height: 10),
           Row(
@@ -129,7 +150,8 @@ class _DashState extends State<Dash> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const PenitipanPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const PenitipanPage()),
                   );
                 },
               ),
@@ -138,7 +160,10 @@ class _DashState extends State<Dash> {
           const SizedBox(height: 20),
           Text(
             'Booking Anda',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purple[800]),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.purple[800]),
           ),
           const SizedBox(height: 10),
           Expanded(
@@ -169,7 +194,8 @@ class _DashState extends State<Dash> {
                 MaterialPageRoute(builder: (context) => Layanan1()),
               );
             },
-            style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 185, 119, 226)),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 251, 182, 232)),
             child: const Text('Pesan Sekarang'),
           ),
         ],
@@ -183,7 +209,11 @@ class ServiceCard extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  const ServiceCard({super.key, required this.title, required this.icon, required this.onTap});
+  const ServiceCard(
+      {super.key,
+      required this.title,
+      required this.icon,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +241,10 @@ class ServiceCard extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ),
           ],
@@ -228,7 +261,13 @@ class BookingCard extends StatelessWidget {
   final String price;
   final String pets;
 
-  const BookingCard({super.key, required this.title, required this.date, required this.time, required this.price, required this.pets});
+  const BookingCard(
+      {super.key,
+      required this.title,
+      required this.date,
+      required this.time,
+      required this.price,
+      required this.pets});
 
   @override
   Widget build(BuildContext context) {

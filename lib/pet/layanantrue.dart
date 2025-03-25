@@ -4,6 +4,7 @@ import 'package:wellpage/pet/dasboard.dart';
 import 'package:wellpage/pet/grooming2.dart';
 import 'package:wellpage/pet/penitipan.dart';
 import 'package:wellpage/pet/formbook2.dart';
+import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/pet/stylebook.dart';
 import 'package:wellpage/screen/welcome.dart';
 import 'package:wellpage/widgets/welcome_button.dart';
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
       title: 'Pilih Layanan',
       theme: ThemeData(
         primarySwatch: Colors.purple,
-        scaffoldBackgroundColor: Styless.backgroundColor, // Apply background color
+        scaffoldBackgroundColor:
+            Styless.backgroundColor, // Apply background color
         appBarTheme: AppBarTheme(
           backgroundColor: Styless.appBarColor, // Apply app bar color
         ),
@@ -83,7 +85,7 @@ class _LayanantrueState extends State<Layanantrue> {
           Layanan1(), // First Page
           BookingPage(), // Replace with your actual ChatPage widget
           PenitipanPage(), // Replace with your actual NewPostPage widget
-          WelcomeScreen(), // Replace with your actual Signin widget
+          HomeScreens()//eplace with your actual Signin widget
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -93,12 +95,12 @@ class _LayanantrueState extends State<Layanantrue> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chat',
+            icon: Icon(Icons.book),
+            label: 'Booking',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'New Post',
+            icon: Icon(Icons.local_library),
+            label: 'Penitipan',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -107,6 +109,7 @@ class _LayanantrueState extends State<Layanantrue> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        selectedItemColor: Colors.purple[300],
       ),
     );
   }
@@ -132,7 +135,10 @@ class Layanan1 extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               'Layanan',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purple[800]),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple[800]),
             ),
             const SizedBox(height: 10),
             Row(
@@ -154,7 +160,8 @@ class Layanan1 extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const PenitipanPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const PenitipanPage()),
                     );
                   },
                 ),
@@ -163,7 +170,10 @@ class Layanan1 extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               'Syarat & Ketentuan',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purple[800]),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple[800]),
             ),
             const SizedBox(height: 10),
             const Text(
@@ -182,6 +192,8 @@ class Layanan1 extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => BookingPage()),
                 );
               },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 251, 182, 232)),
               child: const Text('Pesan Sekarang'),
             ),
           ],

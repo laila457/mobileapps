@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/controllers/register.dart';
+import 'package:wellpage/pet/dasboard.dart';
 import 'package:wellpage/pet/layanantrue.dart';
 import 'package:wellpage/screen/signin.dart';
 import 'package:wellpage/screen/welcome.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: WelcomeScreen(), // Ensure the LoginScreen is called correctly
+      home: WelcomeScreen()//en is called correctly
     );
   }
 }

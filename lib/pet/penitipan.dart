@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/apps_style2.dart';
+import 'package:wellpage/pet/booking.dart';
+import 'package:wellpage/pet/profile.dart';
+import 'package:wellpage/screen/welcome.dart';
 import 'package:wellpage/sizes_config2.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:wellpage/pet/dasboard.dart';
 
 class PenitipanPage extends StatefulWidget {
   const PenitipanPage({super.key});
@@ -11,6 +15,8 @@ class PenitipanPage extends StatefulWidget {
 }
 
 class _PenitipanPageState extends State<PenitipanPage> {
+  final PageController _pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +28,16 @@ class _PenitipanPageState extends State<PenitipanPage> {
           },
         ),
       ),
-      body: const HomeScreen(),
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          const HomeScreen(), // First Page (previously the HomeScreen)
+          BookingPage(), // Replace with your actual ChatPage widget
+          const PenitipanPage(), // Replace with your actual NewPostPage widget
+          const HomeScreens(), // Replace with your actual Signin widget
+        ],
+      ),
     );
   }
 }

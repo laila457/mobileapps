@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:wellpage/pet/detailbook.dart';
 import 'package:wellpage/pet/navigator.dart';
+import 'package:http/http.dart' as http;
+
 void main() {
   runApp(MyApp());
 }
@@ -12,9 +14,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Booking Form',
+      title: '',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.deepPurple,
       ),
       home: BookingPage(),
     );
@@ -31,9 +33,13 @@ class _BookingPageState extends State<BookingPage> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
   String? selectedPackage;
-  String? name;
-  String? phone;
   String? animalType;
+
+  // Controllers for TextFields
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+  bool isLoading = false; // Loading indicator
 
   List<String> months = [
     'Januari',
@@ -96,8 +102,8 @@ class _BookingPageState extends State<BookingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('🐾 Booking Form'),
-        backgroundColor: Colors.purple[700],
+        title: Text(''),
+        backgroundColor:  const Color.fromARGB(255, 255, 255, 255),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -176,27 +182,19 @@ class _BookingPageState extends State<BookingPage> {
                   color: Colors.purple[800]),
             ),
             TextField(
+              controller: nameController,
               decoration: InputDecoration(
                 labelText: 'Nama Pemilik',
                 prefixIcon: Icon(Icons.person, color: Colors.purple[700]),
               ),
-              onChanged: (value) {
-                setState(() {
-                  name = value;
-                });
-              },
             ),
             TextField(
+              controller: phoneController,
               decoration: InputDecoration(
                 labelText: 'No. HP',
                 prefixIcon: Icon(Icons.phone, color: Colors.purple[700]),
               ),
               keyboardType: TextInputType.phone,
-              onChanged: (value) {
-                setState(() {
-                  phone = value;
-                });
-              },
             ),
             TextField(
               decoration: InputDecoration(
@@ -205,7 +203,7 @@ class _BookingPageState extends State<BookingPage> {
               ),
               onChanged: (value) {
                 setState(() {
-                  name = value;
+                  // No need to set name again; consider removing this
                 });
               },
             ),
@@ -249,41 +247,68 @@ class _BookingPageState extends State<BookingPage> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () async {
-                if (name != null &&
-                    phone != null &&
+              onPressed: () async {   runApp(MyApp());
+                if (isLoading) return; // Prevent multiple clicks
+                setState(() {
+                  isLoading = true; // Set loading to true
+                });
+
+                // Validate input fields
+                if (nameController.text.isNotEmpty &&
+                    phoneController.text.isNotEmpty &&
                     selectedMonth != null &&
                     selectedDate != null &&
                     animalType != null &&
                     selectedPackage != null) {
-                  // Save booking to Firestore
-                  await FirebaseFirestore.instance.collection('bookings').add({
-                    'name': name,
-                    'phone': phone,
-                    'month': selectedMonth,
-                    'date': selectedDate.toIso8601String(),
-                    'time': '${selectedTime.hour}:${selectedTime.minute}',
-                    'animalType': animalType,
-                    'package': selectedPackage,
-                  });
+                  try {
+                    // Save booking to Firestore
+                    await FirebaseFirestore.instance
+                        .collection('bookings')
+                        .add({
+                      'name': nameController.text,
+                      'phone': phoneController.text,
+                      'month': selectedMonth,
+                      'date': selectedDate.toIso8601String(),
+                      'time': '${selectedTime.hour}:${selectedTime.minute}',
+                      'animalType': animalType,
+                      'package': selectedPackage,
+                    });
 
-                  // Navigate to BookingHistory
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => BookingHistory()),
-                  );
+                    // Show success message
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Booking created successfully!'),
+                    ));
+
+                    // Navigate to BookingHistory
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => BookingHistory()),
+                    );
+                  } catch (error) {
+                    // Show error message if booking creation failed
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Error: ${error.toString()}'),
+                    ));
+                  }
                 } else {
                   // Show error message if fields are not filled
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Please fill all fields!'),
                   ));
                 }
+
+                setState(() {
+                  isLoading = false; // Set loading to false after processing
+                });
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.purple[700],
               ),
-              child: Text('Selesaikan Pemesanan'),
+              child: isLoading
+                  ? CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white))
+                  : Text('Selesaikan Pemesanan'),
             ),
           ],
         ),
