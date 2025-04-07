@@ -15,6 +15,7 @@ class HomeScreens extends StatelessWidget {
             ProfileSection(),
             StatsSection(),
             GallerySection(),
+            LogoutButton(),
           ],
         ),
       ),
@@ -141,6 +142,22 @@ class GallerySection extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+class LogoutButton extends StatelessWidget {
+  const LogoutButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        // Tambahkan logika logout di sini
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Logged out successfully')),
+        );
+      },
+      child: const Text('Logout'),
     );
   }
 }

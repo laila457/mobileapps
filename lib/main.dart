@@ -3,13 +3,13 @@ import 'package:wellpage/controllers/register.dart';
 import 'package:wellpage/pet/dasboard.dart';
 import 'package:wellpage/pet/layanantrue.dart';
 import 'package:wellpage/screen/signin.dart';
-import 'package:wellpage/screen/welcome.dart';
 import 'package:wellpage/beranda.dart';
 import 'package:wellpage/pet/penjualan.dart';
 import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/controllers/login_screen.dart'; // Ensure this import is correct
 import 'package:wellpage/pet/formbook2.dart'; // Ensure this import is correct
 import 'package:firebase_core/firebase_core.dart';
+import 'package:wellpage/screen/welcome.dart ';
 
 void main() {
   runApp(const MyApp());

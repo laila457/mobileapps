@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthBookingController {
-  final String baseUrl = "http://192.168.194.32/api"; // Ganti dengan URL API Anda
+  final String baseUrl = "http://192.168.100.142/api"; // Ganti dengan URL API Anda
 
   Future<Map<String, dynamic>> createBooking(
     String name,
