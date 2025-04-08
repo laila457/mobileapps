@@ -10,6 +10,8 @@ import 'package:wellpage/controllers/login_screen.dart'; // Ensure this import i
 import 'package:wellpage/pet/formbook2.dart'; // Ensure this import is correct
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wellpage/screen/welcome.dart ';
+import 'package:wellpage/pet/profile.dart';
+import 'package:wellpage/pet/formbooking.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: WelcomeScreen()//en is called correctly
+      home: FormBooking()//en is called correctly
     );
   }
 }

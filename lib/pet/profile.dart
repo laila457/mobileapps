@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screen/welcome.dart';  // Add this import
 
 class HomeScreens extends StatelessWidget {
   const HomeScreens({super.key});
@@ -152,7 +153,7 @@ class LogoutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        // Tambahkan logika logout di sini
+        Navigator.pushReplacementNamed(context, '/WelcomeScreen');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Logged out successfully')),
         );
