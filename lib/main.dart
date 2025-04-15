@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:wellpage/controllers/register.dart';
 import 'package:wellpage/pet/dasboard.dart';
 import 'package:wellpage/pet/layanantrue.dart';
+import 'package:wellpage/pet/rating.dart';
 import 'package:wellpage/screen/signin.dart';
 import 'package:wellpage/beranda.dart';
 import 'package:wellpage/pet/penjualan.dart';
 import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/controllers/login_screen.dart'; // Ensure this import is correct
-import 'package:wellpage/pet/formbook2.dart'; // Ensure this import is correct
+import 'package:wellpage/pet/formbooking.dart'; // Ensure this import is correct
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wellpage/screen/welcome.dart ';
 import 'package:wellpage/pet/profile.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: FormBooking()//en is called correctly
+      home: WelcomeScreen()//en is called correctly
     );
   }
 }

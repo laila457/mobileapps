@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/apps_style2.dart';
 import 'package:wellpage/pet/booking.dart';
+import 'package:wellpage/pet/formbooking.dart';
 import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/screen/welcome.dart';
 import 'package:wellpage/sizes_config2.dart';
@@ -33,7 +34,7 @@ class _PenitipanPageState extends State<PenitipanPage> {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           const HomeScreen(), // First Page (previously the HomeScreen)
-          BookingPage(), // Replace with your actual ChatPage widget
+          FormBooking(), // Replace with your actual ChatPage widget
           const PenitipanPage(), // Replace with your actual NewPostPage widget
           const HomeScreens(), // Replace with your actual Signin widget
         ],

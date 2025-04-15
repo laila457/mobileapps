@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wellpage/pet/booking.dart';
 import 'package:wellpage/pet/dasboard.dart';
 import 'package:wellpage/pet/grooming2.dart';
-import 'package:wellpage/pet/penitipan.dart';
-import 'package:wellpage/pet/formbook2.dart';
+import 'package:wellpage/pet/penitipan2.dart';
+import 'package:wellpage/pet/formbooking.dart';
 import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/pet/stylebook.dart';
 import 'package:wellpage/screen/welcome.dart';
@@ -83,8 +83,8 @@ class _LayanantrueState extends State<Layanantrue> {
         physics: NeverScrollableScrollPhysics(),
         children: [
           Layanan1(), // First Page
-          BookingPage(), // Replace with your actual ChatPage widget
-          PenitipanPage(), // Replace with your actual NewPostPage widget
+          FormBooking(), // Replace with your actual ChatPage widget
+          Penitipan2(), // Replace with your actual NewPostPage widget
           HomeScreens()//eplace with your actual Signin widget
         ],
       ),
@@ -161,7 +161,7 @@ class Layanan1 extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const PenitipanPage()),
+                          builder: (context) => const Penitipan2()),
                     );
                   },
                 ),
@@ -189,7 +189,7 @@ class Layanan1 extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BookingPage()),
+                  MaterialPageRoute(builder: (context) => FormBooking()),
                 );
               },
               style: ElevatedButton.styleFrom(

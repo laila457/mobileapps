@@ -1,31 +1,51 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class AuthBookingController {
-  final String baseUrl = "http://192.168.100.142/api"; // Ganti dengan URL API Anda
+class BookingController {
+  static Future<bool> saveBooking({
+    required String ownerName,
+    required String phoneNumber,
+    required int petCount,
+    required String petType,
+    required String notes,
+    required DateTime bookingDate,
+    required TimeOfDay bookingTime,
+  }) async {
+    try {
+      String url = 'http://192.168.251.32/flutter_api/save_booking.php'; // Ganti dengan 10.0.2.2 jika menggunakan emulator
+      var formData = {
+        'owner_name': ownerName,
+        'phone_number': phoneNumber,
+        'pet_count': petCount.toString(),
+        'pet_type': petType,
+        'notes': notes,
+        'booking_date': "${bookingDate.year}-${bookingDate.month.toString().padLeft(2, '0')}-${bookingDate.day.toString().padLeft(2, '0')}",
+        'booking_time': "${bookingTime.hour.toString().padLeft(2, '0')}:${bookingTime.minute.toString().padLeft(2, '0')}:00"
+      };
 
-  Future<Map<String, dynamic>> createBooking(
-    String name,
-    String phone,
-    String month,
-    String date,
-    String time,
-    String animalType,
-    String package,
-  ) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/create_booking.php'), // Endpoint untuk membuat booking
-      body: {
-        "name": name,
-        "phone": phone,
-        "month": month,
-        "date": date,
-        "time": time,
-        "animal_type": animalType,
-        "package": package,
-      },
-    );
+      print('Sending request to: $url');
+      print('Form data: $formData');
 
-    return json.decode(response.body);
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData,
+      );
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        return result['success'] == true;
+      }
+      return false;
+    } catch (e) {
+      print('Connection error: $e');
+      return false;
+    }
   }
 }

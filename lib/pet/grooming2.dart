@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/pet/booking.dart';
-import 'package:wellpage/pet/formbook2.dart';
-import 'package:wellpage/pet/penitipan.dart';
+import 'package:wellpage/pet/formbooking.dart';
+import 'package:wellpage/pet/penitipan2.dart';
 import 'package:wellpage/screen/welcome.dart';
 import 'package:wellpage/pet/profile.dart';
 
@@ -98,7 +98,7 @@ class _GroomingsPageState extends State<GroomingsPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => BookingPage()),
+                      MaterialPageRoute(builder: (context) => FormBooking()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -109,8 +109,8 @@ class _GroomingsPageState extends State<GroomingsPage> {
               ],
             ),
           ),
-          BookingPage(), // Replace with your actual ChatPage widget
-          const PenitipanPage(), // Replace with your actual NewPostPage widget
+          FormBooking(), // Replace with your actual ChatPage widget
+          const Penitipan2(), // Replace with your actual NewPostPage widget
           const HomeScreens(), // Replace with your actual Signin widget
         ],
       ),

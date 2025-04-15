@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/controllers/login_screen.dart';
 import 'package:wellpage/pet/booking.dart';
-import 'package:wellpage/pet/formbook2.dart';
+import 'package:wellpage/pet/formbooking.dart';
 import 'package:wellpage/pet/layanantrue.dart';
 import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/screen/welcome.dart';
 import 'grooming2.dart'; // Import the GroomingPage
-import 'penitipan.dart'; // Import the PenitipanPage
+import 'penitipan2.dart'; // Import the PenitipanPage
 
 void main() {
   runApp(MaterialApp(
@@ -55,8 +55,8 @@ class _DashState extends State<Dash> {
             const NeverScrollableScrollPhysics(), // Disable swipe to change pages
         children: [
           _buildHomePage(context), // Home Page
-          BookingPage(), // Replace with your actual ChatPage widget
-          PenitipanPage(), // Replace with your actual NewPostPage widget
+          FormBooking(), // Replace with your actual ChatPage widget
+          Penitipan2(), // Replace with your actual NewPostPage widget
           HomeScreens(),//ual Signin widget
         ],
       ),
@@ -151,7 +151,7 @@ class _DashState extends State<Dash> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const PenitipanPage()),
+                        builder: (context) => const Penitipan2()),
                   );
                 },
               ),
