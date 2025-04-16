@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/controllers/login_screen.dart';
-import 'package:wellpage/pet/booking.dart';
 import 'package:wellpage/pet/formbooking.dart';
 import 'package:wellpage/pet/layanantrue.dart';
 import 'package:wellpage/pet/profile.dart';
@@ -81,7 +80,9 @@ class _DashState extends State<Dash> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: Colors.purple[300],
+        selectedItemColor: Colors.purple[800], //warna icon saat dipilih
+        unselectedItemColor: Colors.purple[200],
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }

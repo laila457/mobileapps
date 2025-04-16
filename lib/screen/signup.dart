@@ -56,21 +56,33 @@ class _SignupState extends State<Signup> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: const [
-            DrawerHeader(
+            UserAccountsDrawerHeader(
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 201, 44, 198),
+                gradient: LinearGradient(
+                  colors: [Colors.purple, Color.fromARGB(255, 211, 47, 208)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-              child: Text(
-                'Menu',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
+              accountName: Text('Welcome',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              accountEmail: Text('Create your account'),
             ),
           ],
         ),
       ),
       child: Column(
         children: [
-          const Expanded(flex: 1, child: SizedBox(height: 10)),
+          const Expanded(
+            flex: 1,
+            child: Center(
+              child: Icon(
+                Icons.pets,
+                size: 80,
+                color: Colors.white,
+              ),
+            ),
+          ),
           Expanded(
             flex: 7,
             child: Container(
@@ -81,6 +93,13 @@ class _SignupState extends State<Signup> {
                   topLeft: Radius.circular(40.0),
                   topRight: Radius.circular(40.0),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                  ),
+                ],
               ),
               child: SingleChildScrollView(
                 child: Form(
@@ -110,10 +129,19 @@ class _SignupState extends State<Signup> {
                         decoration: InputDecoration(
                           label: const Text('Full Name'),
                           hintText: 'Enter Full Name',
-                          hintStyle: const TextStyle(color: Color.fromARGB(91, 252, 97, 255)),
+                          prefixIcon: const Icon(Icons.person_outline),
+                          hintStyle: const TextStyle(color: Colors.black26),
                           border: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Color.fromARGB(52, 145, 237, 189)),
-                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.purple.shade200),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.purple),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                         ),
                       ),

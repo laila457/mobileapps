@@ -16,25 +16,33 @@ class Navigation extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: selectedIndex,
       onTap: onItemTapped,
-      selectedItemColor: Colors.black, // Light purple color for selected items
-      unselectedItemColor: Colors.grey, // Black for unselected items
+      selectedItemColor: Colors.black,
+      unselectedItemColor: Colors.grey.shade700, // Changed to dark gray
       backgroundColor: Styless.backgroundColor,
       type: BottomNavigationBarType.fixed,
+      elevation: 8,
+      selectedLabelStyle: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontSize: 12,
+      ),
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.home_rounded),
           label: 'Beranda',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.book),
+          icon: Icon(Icons.book_rounded),
           label: 'Booking',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_library),
+          icon: Icon(Icons.local_library_rounded),
           label: 'Penitipan',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.logout),
+          icon: Icon(Icons.logout_rounded),
           label: 'Logout',
         ),
       ],

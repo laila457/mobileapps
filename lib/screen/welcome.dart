@@ -82,8 +82,8 @@ class WelcomeScreen extends StatelessWidget {
           ),
           Flexible(
             flex: 1,
-            child: Align(
-              alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Row(
                 children: [
                   Expanded(
@@ -99,17 +99,36 @@ class WelcomeScreen extends StatelessWidget {
                       textColor: Colors.purple,
                     ),
                   ),
+                  const SizedBox(width: 16),
                   Expanded(
-                    child: WelcomeButton(
-                      buttontext: 'Sign Up',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Signup()),
-                        );
-                      },
-                      color: Colors.white,
-                      textColor: Colors.purple,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Colors.purple, Color.fromARGB(255, 211, 47, 208)],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.purple.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: WelcomeButton(
+                        buttontext: 'Sign Up',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Signup()),
+                          );
+                        },
+                        color: Colors.transparent,
+                        textColor: Colors.white,
+                      ),
                     ),
                   ),
                 ],

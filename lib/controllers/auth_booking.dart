@@ -13,7 +13,7 @@ class BookingController {
     required TimeOfDay bookingTime,
   }) async {
     try {
-      String url = 'http://192.168.251.32/flutter_api/save_booking.php'; // Ganti dengan 10.0.2.2 jika menggunakan emulator
+      String url = 'http://192.168.5.120/flutter_api/save_booking.php'; // Ganti dengan 10.0.2.2 jika menggunakan emulator
       var formData = {
         'owner_name': ownerName,
         'phone_number': phoneNumber,
