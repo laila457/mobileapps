@@ -67,14 +67,15 @@ class _FormBookingState extends State<FormBooking> {
     try {
       // Remove the local selectedPetType declaration
       final success = await BookingController.saveBooking(
-        ownerName: nameController.text,
-        phoneNumber: phoneController.text,
-        petCount: int.tryParse(petCountController.text) ?? 0,
-        petType: selectedPetType ?? '',  // Use the class-level variable
-        notes: notesController.text,
-        bookingDate: selectedDate,
-        bookingTime: selectedTime,
-      );
+  ownerName: nameController.text,
+  phoneNumber: phoneController.text,
+  petCount: int.tryParse(petCountController.text) ?? 0,
+  petType: selectedPetType ?? '',
+  notes: notesController.text,
+  bookingDate: selectedDate,
+  bookingTime: selectedTime,
+);
+
   
       if (!mounted) return;
       if (success) {

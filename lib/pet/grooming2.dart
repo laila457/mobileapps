@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/pet/formbooking.dart';
+import 'package:wellpage/pet/layanantrue.dart';
 import 'package:wellpage/pet/penitipan2.dart';
 import 'package:wellpage/screen/welcome.dart';
 import 'package:wellpage/pet/profile.dart';
@@ -62,7 +63,7 @@ class _GroomingsPageState extends State<GroomingsPage> {
                     DataRow(cells: [
                       DataCell(Text('Basic')),
                       DataCell(Text('Rp 59.000')),
-                      DataCell(Text('Perawatan Basik')),
+                      DataCell(Text('Perawatan Basic')),
                     ]),
                     DataRow(cells: [
                       DataCell(Text('Kutu - Jamur')),
@@ -108,17 +109,17 @@ class _GroomingsPageState extends State<GroomingsPage> {
               ],
             ),
           ),
-          FormBooking(), // Replace with your actual ChatPage widget
-          const Penitipan2(), // Replace with your actual NewPostPage widget
+          Layanan1(), // Replace with your actual ChatPage widget
+          FormBooking(), // Replace with your actual NewPostPage widget
           const HomeScreens(), // Replace with your actual Signin widget
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Booking'),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Layanan'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.local_library), label: 'Penitipan'),
+              icon: Icon(Icons.local_library), label: 'Booking'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         currentIndex: _selectedIndex,

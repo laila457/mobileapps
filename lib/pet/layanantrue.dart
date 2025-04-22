@@ -7,6 +7,7 @@ import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/pet/stylebook.dart';
 import 'package:wellpage/screen/welcome.dart';
 import 'package:wellpage/widgets/welcome_button.dart';
+import 'package:wellpage/pet/rating.dart';
 
 void main() {
   runApp(MyApp());
@@ -154,6 +155,16 @@ class Layanan1 extends StatelessWidget {
                   },
                 ),
                 ServiceCard(
+                  title: 'Antar Jemput',
+                  icon: Icons.motorcycle,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Dashboard()),
+                    );
+                  },
+                ),
+                ServiceCard(
                   title: 'Penitipan',
                   icon: Icons.house,
                   onTap: () {
@@ -194,6 +205,58 @@ class Layanan1 extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 251, 182, 232)),
               child: const Text('Pesan Sekarang'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Add this class at the end of the file
+class ServiceCard extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const ServiceCard({
+    Key? key,
+    required this.title,
+    required this.icon,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 40, color: Colors.purple[300]),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.purple[800],
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),

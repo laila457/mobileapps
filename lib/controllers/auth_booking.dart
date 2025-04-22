@@ -3,17 +3,16 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class BookingController {
-  static Future<bool> saveBooking({
-    required String ownerName,
-    required String phoneNumber,
-    required int petCount,
-    required String petType,
-    required String notes,
-    required DateTime bookingDate,
-    required TimeOfDay bookingTime,
-  }) async {
+static Future<bool> saveBooking({
+  required String ownerName,
+  required String phoneNumber,
+  required int petCount,
+  required String petType,
+  required String notes,
+  required DateTime bookingDate,
+  required TimeOfDay bookingTime,  }) async {
     try {
-      String url = 'http://192.168.5.120/flutter_api/save_booking.php'; // Ganti dengan 10.0.2.2 jika menggunakan emulator
+      String url = 'http://192.168.100.142/flutter_api/save_booking.php'; // Ganti dengan 10.0.2.2 jika menggunakan emulator
       var formData = {
         'owner_name': ownerName,
         'phone_number': phoneNumber,

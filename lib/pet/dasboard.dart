@@ -54,8 +54,8 @@ class _DashState extends State<Dash> {
             const NeverScrollableScrollPhysics(), // Disable swipe to change pages
         children: [
           _buildHomePage(context), // Home Page
-          FormBooking(), // Replace with your actual ChatPage widget
-          Penitipan2(), // Replace with your actual NewPostPage widget
+          Layanan1(), // Replace with your actual ChatPage widget
+          FormBooking(), // Replace with your actual NewPostPage widget
           HomeScreens(),//ual Signin widget
         ],
       ),
@@ -67,11 +67,11 @@ class _DashState extends State<Dash> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
-            label: 'Booking',
+            label: 'Layanan',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_library),
-            label: 'Penitipan',
+            label: 'Booking',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -146,13 +146,13 @@ class _DashState extends State<Dash> {
                 },
               ),
               ServiceCard(
-                title: 'Penitipan',
+                title: 'Layanan',
                 icon: Icons.house,
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Penitipan2()),
+                        builder: (context) => const Layanan1()),
                   );
                 },
               ),
@@ -192,7 +192,7 @@ class _DashState extends State<Dash> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Layanan1()),
+                MaterialPageRoute(builder: (context) => FormBooking()),
               );
             },
             style: ElevatedButton.styleFrom(
