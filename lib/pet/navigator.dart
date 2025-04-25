@@ -35,11 +35,11 @@ class Navigation extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.book_rounded),
-          label: 'Booking',
+          label: 'Layanan',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.local_library_rounded),
-          label: 'Penitipan',
+          label: 'Booking',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.logout_rounded),

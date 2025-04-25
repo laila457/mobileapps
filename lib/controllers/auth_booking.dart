@@ -12,7 +12,7 @@ static Future<bool> saveBooking({
   required DateTime bookingDate,
   required TimeOfDay bookingTime,  }) async {
     try {
-      String url = 'http://192.168.100.142/flutter_api/save_booking.php'; // Ganti dengan 10.0.2.2 jika menggunakan emulator
+      String url = 'http://192.168.5.73/flutter_api/save_booking.php'; // Ganti dengan 10.0.2.2 jika menggunakan emulator
       var formData = {
         'owner_name': ownerName,
         'phone_number': phoneNumber,

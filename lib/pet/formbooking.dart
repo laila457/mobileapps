@@ -114,7 +114,7 @@ class _FormBookingState extends State<FormBooking> {
     // Remove the selectedPetType declaration from here
     return Scaffold(
       appBar: AppBar(
-        title: Text('Booking Layanan'),
+        title: Text('Booking Grooming'),
         elevation: 0,
       ),
       body: SingleChildScrollView(

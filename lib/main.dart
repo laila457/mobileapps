@@ -7,8 +7,8 @@ import 'package:wellpage/screen/signin.dart';
 import 'package:wellpage/beranda.dart';
 import 'package:wellpage/pet/penjualan.dart';
 import 'package:wellpage/pet/profile.dart';
-import 'package:wellpage/controllers/login_screen.dart'; // Ensure this import is correct
-import 'package:wellpage/pet/formbooking.dart'; // Ensure this import is correct
+import 'package:wellpage/controllers/login_screen.dart'; 
+import 'package:wellpage/pet/formbooking.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wellpage/screen/welcome.dart ';
 import 'package:wellpage/pet/profile.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Dash()//en is called correctly
+      home: WelcomeScreen()//en is called correctly
     );
   }
 }

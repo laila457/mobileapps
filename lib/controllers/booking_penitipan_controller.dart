@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class BookPenitipanController {
-  static const String baseUrl = 'https://192.168.100.142/api/booking';
+  static const String baseUrl = 'https://192.168.5.73/api/booking';
 
   static Future<bool> saveBooking({
     required String ownerName,

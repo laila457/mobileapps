@@ -5,6 +5,8 @@ import 'package:wellpage/screen/signup.dart';
 import 'package:wellpage/widgets/custom_scaffold.dart';
 import 'package:wellpage/theme/theme.dart';
 import 'package:wellpage/controllers/auth_controller.dart';  // Make sure this path is correct
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
