@@ -4,10 +4,9 @@ import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:wellpage/pet/stylebook.dart';
 import 'package:http/http.dart' as http;
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart' as path_package;
-import 'package:wellpage/controllers/auth_booking.dart';
-import 'package:wellpage/controllers/auth_booking.dart';
+import 'package:wellpage/models/booking_model.dart';
+import 'package:wellpage/controllers/booking_controller.dart';
+
 class FormBooking extends StatefulWidget {
   @override
   _FormBookingState createState() => _FormBookingState();
@@ -16,67 +15,43 @@ class FormBooking extends StatefulWidget {
 class _FormBookingState extends State<FormBooking> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
-  String? selectedPetType = 'Kucing';  // Add this line with other state variables
+  String selectedPetType = 'Kucing';
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController petCountController = TextEditingController();
-  final TextEditingController petTypeController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
   bool isLoading = false;
 
-  // Add at the beginning of _FormBookingState class
   @override
   void initState() {
     super.initState();
     _initializeDatabase();
-    // Remove the selectedPetType declaration from here
   }
 
   Future<void> _initializeDatabase() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    final database = await openDatabase(
-      path_package.join(await getDatabasesPath(), 'flutter_auth.db'),
-      version: 1,
-      onCreate: (db, version) async {
-        await db.execute('''
-          CREATE TABLE IF NOT EXISTS bookings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            owner_name TEXT,
-            phone_number TEXT,
-            pet_count INTEGER,
-            pet_type TEXT,
-            notes TEXT,
-            booking_date TEXT,
-            booking_time TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-          )
-        ''');
-      },
-    );
-    await database.close();
+    await BookingController.initDatabase();
   }
 
-  // Update the _saveBooking method
-  // In your _saveBooking method
   Future<void> _saveBooking() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => isLoading = true);
 
     try {
-      // Remove the local selectedPetType declaration
-      final success = await BookingController.saveBooking(
-  ownerName: nameController.text,
-  phoneNumber: phoneController.text,
-  petCount: int.tryParse(petCountController.text) ?? 0,
-  petType: selectedPetType ?? '',
-  notes: notesController.text,
-  bookingDate: selectedDate,
-  bookingTime: selectedTime,
-);
+      // Create a booking model
+      BookingModel booking = BookingModel(
+        ownerName: nameController.text,
+        phoneNumber: phoneController.text,
+        petCount: int.tryParse(petCountController.text) ?? 0,
+        petType: selectedPetType,
+        notes: notesController.text,
+        bookingDate: selectedDate.toString().split(' ')[0],
+        bookingTime: '${selectedTime.hour}:${selectedTime.minute.toString().padLeft(2, '0')}',
+      );
 
-  
+      final success = await BookingController.saveBooking(booking);
+      
       if (!mounted) return;
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -100,18 +75,16 @@ class _FormBookingState extends State<FormBooking> {
     nameController.clear();
     phoneController.clear();
     petCountController.clear();
-    petTypeController.clear();
     notesController.clear();
     setState(() {
       selectedDate = DateTime.now();
       selectedTime = TimeOfDay.now();
-      selectedPetType = 'Kucing';  // Add this line
+      selectedPetType = 'Kucing';
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Remove the selectedPetType declaration from here
     return Scaffold(
       appBar: AppBar(
         title: Text('Booking Grooming'),
@@ -140,10 +113,8 @@ class _FormBookingState extends State<FormBooking> {
                         SizedBox(height: 16),
                         CalendarTimeline(
                           initialDate: selectedDate,
-                          firstDate: DateTime(DateTime.now().year, 1,
-                              1), // Start from January of current year
-                          lastDate: DateTime(DateTime.now().year, 12,
-                              31), // End at December of current year
+                          firstDate: DateTime(DateTime.now().year, 1, 1),
+                          lastDate: DateTime(DateTime.now().year, 12, 31),
                           onDateSelected: (date) =>
                               setState(() => selectedDate = date),
                           monthColor: Colors.white,
@@ -233,7 +204,7 @@ class _FormBookingState extends State<FormBooking> {
                           ],
                           onChanged: (value) {
                             setState(() {
-                              selectedPetType = value;
+                              selectedPetType = value!;
                             });
                           },
                           validator: (value) => value == null
@@ -312,7 +283,6 @@ class _FormBookingState extends State<FormBooking> {
     nameController.dispose();
     phoneController.dispose();
     petCountController.dispose();
-    petTypeController.dispose();
     notesController.dispose();
     super.dispose();
   }
