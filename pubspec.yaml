@@ -46,16 +46,11 @@ dependencies:
   sqflite: ^2.3.0
   path: ^1.8.3
   mysql1: ^0.20.0
+  flutter_local_notifications: ^16.3.0  # Added with specific version
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^2.0.2
 
 # For information on the generic Dart part of this file, see the
@@ -69,8 +64,8 @@ flutter:
   - assets/images/
 #  - images/logopaws.jpeg
 #  - images/dash.png
-#  - images/
-#  - images/
+#  - images/penitipan.png
+#  - images/delivery.png
 #  - images/
 
   # The following line ensures that the Material Icons font is

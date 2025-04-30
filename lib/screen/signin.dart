@@ -7,6 +7,7 @@ import 'package:wellpage/theme/theme.dart';
 import 'package:wellpage/controllers/auth_controller.dart';  // Make sure this path is correct
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:wellpage/services/notification_service.dart';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -29,10 +30,21 @@ class _SigninState extends State<Signin> {
         passwordController.text,
       );
 
-      if (response['status'] == 'success') {
+if (response['status'] == 'success') {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Login Berhasil! Selamat datang kembali.'),
+      backgroundColor: Colors.green,
+    ),
+  );
+  
+  await Future.delayed(const Duration(milliseconds: 500));  
+  // Add small delay to ensure notification is shown
+  await Future.delayed(const Duration(milliseconds: 500));
+  
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Dash()), // Navigate to Dash
+          MaterialPageRoute(builder: (context) => Dash()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

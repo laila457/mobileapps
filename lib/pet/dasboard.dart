@@ -4,8 +4,8 @@ import 'package:wellpage/pet/formbooking.dart';
 import 'package:wellpage/pet/layanantrue.dart';
 import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/screen/welcome.dart';
-import 'grooming2.dart'; // Import the GroomingPage
-import 'penitipan2.dart'; // Import the PenitipanPage
+import 'package:wellpage/pet/formbooking.dart'; // Import the GroomingPage
+import 'package:wellpage/pet/bookpenitipan.dart'; // Import the BookingScreen
 
 void main() {
   runApp(MaterialApp(
@@ -88,116 +88,146 @@ class _DashState extends State<Dash> {
   }
 
   Widget _buildHomePage(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Center(
-            child: Text(
-              'Welcome To Happy Paws',
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold, // Make text bold
-                color: const Color.fromARGB(255, 4, 4, 4),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          // Add the image asset below the welcome text
-          Center(
-            child: Image.asset(
-              '../assets/images/dash.png',
-              width: 200,// a smaller width
-              height: 200,//et a smaller height
-            ),
-          ),
-          const SizedBox(height: 20),
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Telusuri...',
-              prefixIcon: Icon(Icons.search, color: Colors.purple[300]),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide(color: Colors.purple[300]!),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Layanan',
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.purple[800]),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ServiceCard(
-                title: 'Grooming',
-                icon: Icons.pets,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GroomingsPage()),
-                  );
-                },
-              ),
-              ServiceCard(
-                title: 'Layanan',
-                icon: Icons.house,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Layanan1()),
-                  );
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Booking Anda',
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.purple[800]),
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: ListView(
+          const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
               children: [
-                BookingCard(
-                  title: 'Grooming - Paket Basic',
-                  date: 'Selasa, 2 Feb 2025',
-                  time: '14.00 - 15.00',
-                  price: 'Rp 60.000 - QRIS',
-                  pets: 'Milo - Kucing Persia Max - Golden',
+                Text(
+                  'Layanan Kami',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
-                BookingCard(
-                  title: 'Grooming - Paket Basic',
-                  date: 'Selasa, 2 Feb 2025',
-                  time: '14.00 - 15.00',
-                  price: 'Rp 60.000 - QRIS',
-                  pets: 'Milo - Kucing Persia Max - Golden',
+                SizedBox(height: 8),
+                Text(
+                  'Pilih layanan terbaik untuk hewan kesayangan Anda',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black54,
+                  ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FormBooking()),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 251, 182, 232)),
-            child: const Text('Pesan Sekarang'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ServiceCard(
+                    title: 'Grooming',
+                    subtitle: 'Mulai dari Rp 60.000',
+                    imagePath: 'assets/images/catlist.png',
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FormBooking()),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ServiceCard(
+                    title: 'Penitipan',
+                    subtitle: 'Mulai dari Rp 50.000/hari',
+                    imagePath: 'assets/images/penitipan.png',
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => BookingScreen()),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ServiceCard(
+              title: 'Antar Jemput',
+              subtitle: 'Tersedia untuk area tertentu',
+              imagePath: 'assets/images/delivery.png',
+              isWide: true,
+              onTap: () {
+                // Handle antar jemput
+              },
+            ),
+          ),
+          const SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Syarat dan Ketentuan',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                RequirementItem(
+                  text: 'Hewan harus dalam kondisi sehat dan tidak agresif',
+                ),
+                RequirementItem(
+                  text: 'Tidak menerima hewan dengan penyakit menular',
+                ),
+                RequirementItem(
+                  text: 'Jika hewan sulit dikendalikan, biaya tambahan dapat dikenakan',
+                ),
+                RequirementItem(
+                  text: 'Pembatalan kurang dari 24 jam sebelum jadwal tidak bisa refund',
+                ),
+                RequirementItem(
+                  text: 'Untuk layanan penitipan, hewan wajib sudah divaksin',
+                ),
+                RequirementItem(
+                  text: 'Layanan antar jemput hanya tersedia di area tertentu',
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FormBooking()),
+                    ),
+                    icon: const Icon(Icons.pets),
+                    label: const Text('Pesan Grooming'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 239, 149, 255),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => BookingScreen()),
+                    ),
+                    icon: const Icon(Icons.home),
+                    label: const Text('Pesan Penitipan'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 239, 149, 255),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -207,45 +237,68 @@ class _DashState extends State<Dash> {
 
 class ServiceCard extends StatelessWidget {
   final String title;
-  final IconData icon;
+  final String subtitle;
+  final String imagePath;
   final VoidCallback onTap;
+  final bool isWide;
 
-  const ServiceCard(
-      {super.key,
-      required this.title,
-      required this.icon,
-      required this.onTap});
+  const ServiceCard({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+    required this.imagePath,
+    required this.onTap,
+    this.isWide = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        width: 180,
-        decoration: BoxDecoration(
-          color: Colors.purple[300],
-          borderRadius: BorderRadius.circular(16.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.purple.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Icon(icon, size: 40, color: Colors.white),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                title,
-                style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              child: Image.asset(
+                imagePath,
+                height: 150,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: onTap,
+                    child: const Text('Book Now'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple[400],
+                      minimumSize: const Size(double.infinity, 36),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -255,43 +308,23 @@ class ServiceCard extends StatelessWidget {
   }
 }
 
-class BookingCard extends StatelessWidget {
-  final String title;
-  final String date;
-  final String time;
-  final String price;
-  final String pets;
+class RequirementItem extends StatelessWidget {
+  final String text;
 
-  const BookingCard(
-      {super.key,
-      required this.title,
-      required this.date,
-      required this.time,
-      required this.price,
-      required this.pets});
+  const RequirementItem({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 5),
-            Text(date),
-            Text(time),
-            const SizedBox(height: 10),
-            Text(price, style: TextStyle(color: Colors.purple[800])),
-            const SizedBox(height: 5),
-            Text(pets, style: TextStyle(color: Colors.grey[600])),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Icon(Icons.check_circle, color: Colors.purple[400], size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(text, style: const TextStyle(fontSize: 14)),
+          ),
+        ],
       ),
     );
   }

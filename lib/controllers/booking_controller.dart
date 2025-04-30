@@ -9,6 +9,16 @@ import 'package:wellpage/models/booking_model.dart';
 class BookingController {
   static const String apiUrl = 'https://10.60.5.115/api'; // Ganti dengan URL API Anda
   static Database? _database;
+  
+  static get baseUrl => "http://10.60.5.115/api";
+
+  static Future<Map<String, dynamic>> login(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/save_booking.php'),
+      body: {"email": email, "password": password},
+    );
+    return json.decode(response.body);
+  }
 
   // Initialize database
   static Future<Database> initDatabase() async {
@@ -60,7 +70,7 @@ class BookingController {
   static Future<bool> syncWithServer(BookingModel booking) async {
     try {
       final response = await http.post(
-        Uri.parse(apiUrl),
+        Uri.parse('$baseUrl/save_booking.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(booking.toJson()),
       );
