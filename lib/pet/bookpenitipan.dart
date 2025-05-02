@@ -10,10 +10,11 @@ class BookingScreen extends StatefulWidget {
 }
 
 class _BookingScreenState extends State<BookingScreen> {
-  // Existing variables
   String selectedPackage = 'Basic';
   bool isDeliveryService = false;
   String? selectedLocation;
+  String? selectedVillage;
+  final addressDetailController = TextEditingController();
   
   // Calendar variables
   String selectedMonth = DateFormat('MMMM').format(DateTime.now());
@@ -178,28 +179,68 @@ class _BookingScreenState extends State<BookingScreen> {
   void _submitForm() async {
     if (!_formKey.currentState!.validate()) return;
 
+    // Validate delivery fields if delivery service is selected
+    if (isDeliveryService) {
+      if (selectedLocation == null || selectedVillage == null || addressDetailController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Mohon lengkapi data alamat pengantaran')),
+        );
+        return;
+      }
+    }
+
     setState(() => isLoading = true);
 
-    final success = await BookPenitipanController.saveBooking(
-      ownerName: nameController.text,
-      phoneNumber: phoneController.text,
-      petCount: int.parse(petCountController.text),
-      petType: selectedPetType ?? '',
-      notes: notesController.text,
-      bookingDate: selectedDate,
-      bookingTime: selectedTime.format(context),
-    );
-
-    setState(() => isLoading = false);
-
-    if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Booking berhasil!')),
+    try {
+      final success = await BookPenitipanController.saveBooking(
+        ownerName: nameController.text,
+        phoneNumber: phoneController.text,
+        petCount: int.parse(petCountController.text),
+        petType: selectedPetType ?? '',
+        notes: notesController.text,
+        bookingDate: selectedDate,
+        bookingTime: selectedTime.format(context),
+        package: selectedPackage,
+        isDeliveryService: isDeliveryService,
+        location: selectedLocation,
+        village: selectedVillage,
+        addressDetail: addressDetailController.text,
       );
-      _formKey.currentState!.reset();
-    } else {
+
+      setState(() => isLoading = false);
+
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Booking berhasil disimpan!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        // Reset form
+        setState(() {
+          _formKey.currentState!.reset();
+          selectedLocation = null;
+          selectedVillage = null;
+          addressDetailController.clear();
+          isDeliveryService = false;
+          selectedPetType = '';
+          selectedPackage = '';
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Gagal menyimpan booking. Silakan coba lagi.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Gagal menyimpan booking. Coba lagi.')),
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -349,6 +390,67 @@ class _BookingScreenState extends State<BookingScreen> {
                   'Layanan antar jemput gratis tersedia untuk area: Sukaharjo, Plosoyudan, dan Puseurjaya',
                   style: TextStyle(color: Colors.grey[600], fontSize: 12),
                 ),
+
+                // Add delivery address fields when delivery is selected
+                if (isDeliveryService) ...[
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: 'Kecamatan',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    value: selectedLocation,
+                    items: ['Telukjambe Timur'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLocation = value;
+                      });
+                    },
+                    validator: (value) => value == null ? 'Pilih kecamatan' : null,
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: 'Desa/Kelurahan',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    value: selectedVillage,
+                    items: ['Sukaharjo', 'Plosoyudan', 'Puseurjaya'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedVillage = value;
+                      });
+                    },
+                    validator: (value) => value == null ? 'Pilih desa/kelurahan' : null,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: addressDetailController,
+                    decoration: InputDecoration(
+                      labelText: 'Detail Alamat',
+                      hintText: 'Masukkan detail alamat (nama jalan, nomor rumah, RT/RW)',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    maxLines: 3,
+                    validator: (value) => value!.isEmpty ? 'Masukkan detail alamat' : null,
+                  ),
+                ],
 
                 const SizedBox(height: 32),
                 SizedBox(
