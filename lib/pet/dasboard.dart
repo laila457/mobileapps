@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/controllers/login_screen.dart';
-import 'package:wellpage/pet/formbooking.dart';
 import 'package:wellpage/pet/layanantrue.dart';
 import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/screen/welcome.dart';
-import 'package:wellpage/pet/formbooking.dart'; // Import the GroomingPage
-import 'package:wellpage/pet/bookpenitipan.dart'; // Import the BookingScreen
+import 'package:wellpage/screens/hotel_form.dart';
+import 'package:wellpage/screens/grooming_form.dart'; // Import the BookingScreen
 
 void main() {
   runApp(MaterialApp(
@@ -55,7 +54,7 @@ class _DashState extends State<Dash> {
         children: [
           _buildHomePage(context), // Home Page
           Layanan1(), // Replace with your actual ChatPage widget
-          FormBooking(), // Replace with your actual NewPostPage widget
+          GroomingForm(), // Replace with your actual NewPostPage widget
           HomeScreens(),//ual Signin widget
         ],
       ),
@@ -126,7 +125,7 @@ class _DashState extends State<Dash> {
                     imagePath: 'assets/images/catlist.png',
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FormBooking()),
+                      MaterialPageRoute(builder: (context) => GroomingForm()),
                     ),
                   ),
                 ),
@@ -138,7 +137,7 @@ class _DashState extends State<Dash> {
                     imagePath: 'assets/images/penitipan.png',
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => BookingScreen()),
+                      MaterialPageRoute(builder: (context) => HotelForm()),
                     ),
                   ),
                 ),
@@ -201,7 +200,7 @@ class _DashState extends State<Dash> {
                   child: ElevatedButton.icon(
                     onPressed: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FormBooking()),
+                      MaterialPageRoute(builder: (context) => GroomingForm()),
                     ),
                     icon: const Icon(Icons.pets),
                     label: const Text('Pesan Grooming'),
@@ -216,7 +215,7 @@ class _DashState extends State<Dash> {
                   child: ElevatedButton.icon(
                     onPressed: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => BookingScreen()),
+                      MaterialPageRoute(builder: (context) => HotelForm()),
                     ),
                     icon: const Icon(Icons.home),
                     label: const Text('Pesan Penitipan'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../database/database_helper.dart';
+import 'package:wellpage/pet/dasboard.dart'; // Add this import at the top
 
 class GroomingForm extends StatefulWidget {
   const GroomingForm({super.key});
@@ -52,12 +53,36 @@ class _GroomingFormState extends State<GroomingForm> {
         if (mounted) {
           if (success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Booking successful!')),
+              const SnackBar(
+                content: Text(
+                  'Booking berhasil! Silahkan cek status pesanan Anda di dashboard.',
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 3),
+                behavior: SnackBarBehavior.floating,
+              ),
             );
-            Navigator.pop(context);
+            
+            // Navigate to Dashboard
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Dash(),
+              ),
+              (route) => false,
+            );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Failed to create booking')),
+              const SnackBar(
+                content: Text(
+                  'Gagal membuat booking. Silakan coba lagi.',
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 3),
+                behavior: SnackBarBehavior.floating,
+              ),
             );
           }
         }

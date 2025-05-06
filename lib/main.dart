@@ -9,6 +9,9 @@ import 'package:wellpage/pet/profile.dart';
 import 'package:wellpage/controllers/login_screen.dart';
 import 'package:wellpage/pet/formbooking.dart';
 import 'package:wellpage/screen/welcome.dart';
+import 'package:wellpage/screens/hotel_form.dart';
+import 'package:wellpage/screens/grooming_form.dart';
+import 'package:wellpage/screens/hotel_form.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

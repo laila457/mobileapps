@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../database/db_helper.dart';
+import 'package:wellpage/pet/dasboard.dart'; // Add this import at the top
 
 class HotelForm extends StatefulWidget {
   const HotelForm({super.key});
@@ -51,9 +52,25 @@ class _HotelFormState extends State<HotelForm> {
         if (mounted) {
           if (success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Hotel booking successful!')),
+              const SnackBar(
+                content: Text(
+                  'Booking hotel berhasil! Silahkan cek status pesanan Anda di dashboard.',
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 3),
+                behavior: SnackBarBehavior.floating,
+              ),
             );
-            Navigator.pop(context);
+            
+            // Navigate to Dashboard
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Dash(),
+              ),
+              (route) => false,
+            );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Failed to create hotel booking')),
