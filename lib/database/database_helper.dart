@@ -22,4 +22,19 @@ class DatabaseHelper {
       return false;
     }
   }
+
+  static Future<bool> createPayment(Map<String, dynamic> data) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/create_payment.php'),
+        body: data,
+      );
+      
+      final result = json.decode(response.body);
+      return result['success'] == true;
+    } catch (e) {
+      print('Error creating payment: $e');
+      return false;
+    }
+  }
 }

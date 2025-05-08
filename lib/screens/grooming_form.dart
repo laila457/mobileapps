@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../database/database_helper.dart';
 import 'package:wellpage/pet/dasboard.dart'; // Add this import at the top
+import 'package:wellpage/screens/payment_screen.dart'; // Add this import at the top
 
 class GroomingForm extends StatefulWidget {
   const GroomingForm({super.key});
@@ -11,7 +12,6 @@ class GroomingForm extends StatefulWidget {
 }
 
 class _GroomingFormState extends State<GroomingForm> {
-  // Remove duplicate phoneController and fix variable declarations
   final _formKey = GlobalKey<FormState>();
   final ownerNameController = TextEditingController();
   final phoneController = TextEditingController();
@@ -52,25 +52,18 @@ class _GroomingFormState extends State<GroomingForm> {
         
         if (mounted) {
           if (success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Booking berhasil! Silahkan cek status pesanan Anda di dashboard.',
-                  style: TextStyle(color: Colors.white),
-                ),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 3),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            
-            // Navigate to Dashboard
-            Navigator.pushAndRemoveUntil(
+            // Get package price
+            double amount = selectedPackage == 'Basic' ? 59000 :
+                          selectedPackage == 'Kutu & Jamur' ? 70000 : 86000;
+
+            Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const Dash(),
+                builder: (context) => PaymentScreen(
+                  bookingId: success.toString(), // Assuming createGroomingReservation returns the booking ID
+                  amount: amount,
+                ),
               ),
-              (route) => false,
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(

@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Roboto',  // Using a safe default font
       ),
-      home: const WelcomeScreen(),
+      home: const HotelForm(),
     );
   }
 }
