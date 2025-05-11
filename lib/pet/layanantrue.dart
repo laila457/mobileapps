@@ -115,7 +115,6 @@ class _LayanantrueState extends State<Layanantrue> {
   }
 }
 
-// Layanan1 class as defined previously
 class Layanan1 extends StatelessWidget {
   final String? name;
 
@@ -125,95 +124,170 @@ class Layanan1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Layanan Happy Paws'),
+        title: const Text(
+          'Layanan Happy Paws',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.purple[300],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            Text(
-              'Layanan',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.purple[800]),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.purple[50]!, Colors.white],
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ServiceCard(
-                  title: 'Grooming',
-                  icon: Icons.pets,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => GroomingsPage()),
-                    );
-                  },
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.purple.withOpacity(0.1),
+                        spreadRadius: 2,
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Layanan Kami',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purple[800],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ServiceCard(
+                            title: 'Grooming',
+                            icon: Icons.pets,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => GroomingsPage()),
+                            ),
+                          ),
+                          ServiceCard(
+                            title: 'Antar Jemput',
+                            icon: Icons.motorcycle,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Dashboard()),
+                            ),
+                          ),
+                          ServiceCard(
+                            title: 'Penitipan',
+                            icon: Icons.house,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const HotelForm()),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                ServiceCard(
-                  title: 'Antar Jemput',
-                  icon: Icons.motorcycle,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Dashboard()),
-                    );
-                  },
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.purple.withOpacity(0.1),
+                        spreadRadius: 2,
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Syarat & Ketentuan',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purple[800],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      RequirementItem(
+                        icon: Icons.pets,
+                        text: 'Hewan harus dalam kondisi sehat dan tidak agresif',
+                      ),
+                      RequirementItem(
+                        icon: Icons.health_and_safety,
+                        text: 'Tidak menerima hewan dengan penyakit menular',
+                      ),
+                      RequirementItem(
+                        icon: Icons.phone,
+                        text: 'Jika hewan tidak diambil, pemanggilan akan dilakukan',
+                      ),
+                      RequirementItem(
+                        icon: Icons.cancel,
+                        text: 'Pembatalan kurang dari 24 jam sebelum jadwal tidak dapat dilakukan',
+                      ),
+                      RequirementItem(
+                        icon: Icons.calendar_today,
+                        text: 'Untuk layanan penitipan, hewan harus dijadwalkan 1 minggu sebelumnya',
+                      ),
+                    ],
+                  ),
                 ),
-                ServiceCard(
-                  title: 'Penitipan',
-                  icon: Icons.house,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HotelForm()),
-                    );
-                  },
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GroomingForm()),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple[400],
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 4,
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Pesan Sekarang',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Syarat & Ketentuan',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.purple[800]),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              '🔊 Hewan harus dalam kondisi sehat dan tidak agresif.\n'
-              '🔊 Tidak menerima hewan dengan penyakit menular.\n'
-              '🔊 Jika hewan tidak diambil, pemanggilan akan dilakukan.\n'
-              '🔊 Pembatalan kurang dari 24 jam sebelum jadwal tidak dapat dilakukan.\n'
-              '🔊 Untuk layanan penitipan, hewan harus dijadwalkan 1 minggu sebelumnya.',
-              style: TextStyle(fontSize: 14),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GroomingForm()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 251, 182, 232)),
-              child: const Text('Pesan Sekarang'),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-// Add this class at the end of the file
 class ServiceCard extends StatelessWidget {
   final String title;
   final IconData icon;
@@ -231,35 +305,91 @@ class ServiceCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 100,
-        height: 100,
+        width: 110,
+        height: 110,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.purple.withOpacity(0.2),
               spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
           ],
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.white, Colors.purple[50]!],
+          ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 40, color: Colors.purple[300]),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.purple[100]!.withOpacity(0.3),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                size: 32,
+                color: Colors.purple[400],
+              ),
+            ),
             const SizedBox(height: 8),
             Text(
               title,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 color: Colors.purple[800],
                 fontWeight: FontWeight.bold,
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class RequirementItem extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
+  const RequirementItem({
+    Key? key,
+    required this.icon,
+    required this.text,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.purple[50],
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: Colors.purple[400], size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[800],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -40,4 +40,28 @@ class DatabaseHelper {
       return [];
     }
   }
+
+  static Future<bool> updatePaymentStatus(String bookingId, String paymentMethod) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/update_payment_status.php'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'booking_id': bookingId,
+          'payment_method': paymentMethod,
+          'payment_status': 'paid',
+          'payment_date': DateTime.now().toIso8601String(),
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        return result['success'] == true;
+      }
+      return false;
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
+  }
 }

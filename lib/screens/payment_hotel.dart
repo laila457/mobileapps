@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/pet/dasboard.dart';
-import 'package:wellpage/database/database_helper.dart';
+import '../database/db_helper.dart';
 
-class PaymentScreen extends StatefulWidget {
+class PaymentHotel extends StatefulWidget {
   final String bookingId;
   final double amount;
 
-  const PaymentScreen({
-    Key? key, 
-    required this.bookingId, 
-    required this.amount
+  const PaymentHotel({
+    Key? key,
+    required this.bookingId,
+    required this.amount,
   }) : super(key: key);
 
   @override
-  State<PaymentScreen> createState() => _PaymentScreenState();
+  State<PaymentHotel> createState() => _PaymentHotelState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen> {
+class _PaymentHotelState extends State<PaymentHotel> {
   String? selectedPaymentMethod;
 
   final Map<String, List<String>> paymentMethods = {
@@ -45,6 +45,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
       // Simulate payment processing
       await Future.delayed(const Duration(seconds: 2));
 
+      // Update payment status in database
+      await DatabaseHelper.updatePaymentStatus(widget.bookingId, selectedPaymentMethod!);
+
       if (mounted) {
         Navigator.pop(context); // Close loading dialog
         
@@ -55,6 +58,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
         );
 
+        // Navigate to Dashboard
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const Dash()),
@@ -73,7 +77,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pembayaran'),
+        title: const Text('Pembayaran Hotel'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wellpage/controllers/register.dart';
+import 'package:wellpage/pet/grooming2.dart';
 import 'package:wellpage/pet/dasboard.dart';
 import 'package:wellpage/pet/layanantrue.dart';
 import 'package:wellpage/pet/bookpenitipan.dart';
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Roboto',  // Using a safe default font
       ),
-      home: const HotelForm(),
+      home: const WelcomeScreen(),
     );
   }
 }

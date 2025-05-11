@@ -44,44 +44,71 @@ class _DashState extends State<Dash> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
+        title: const Text('Happy Paws', 
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
         backgroundColor: Colors.purple[300],
+        elevation: 0,
+        centerTitle: true,
       ),
-      body: PageView(
-        controller: _pageController,
-        physics:
-            const NeverScrollableScrollPhysics(), // Disable swipe to change pages
-        children: [
-          _buildHomePage(context), // Home Page
-          Layanan1(), // Replace with your actual ChatPage widget
-          GroomingForm(), // Replace with your actual NewPostPage widget
-          HomeScreens(),//ual Signin widget
-        ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.purple[50]!, Colors.white],
+          ),
+        ),
+        child: PageView(
+          controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            _buildHomePage(context),
+            Layanan1(),
+            GroomingForm(),
+            HomeScreens(),
+          ],
+        ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Layanan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_library),
-            label: 'Booking',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.purple[800], //warna icon saat dipilih
-        unselectedItemColor: Colors.purple[200],
-        type: BottomNavigationBarType.fixed,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.pets_rounded),
+              label: 'Layanan',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today_rounded),
+              label: 'Booking',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_rounded),
+              label: 'Profile',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          selectedItemColor: Colors.purple[800],
+          unselectedItemColor: Colors.purple[200],
+          type: BottomNavigationBarType.fixed,
+          elevation: 0,
+        ),
       ),
     );
   }
@@ -91,11 +118,18 @@ class _DashState extends State<Dash> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(20.0),
+          Container(
+            padding: const EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              color: Colors.purple[50],
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
             child: Column(
               children: [
-                Text(
+                const Text(
                   'Layanan Kami',
                   style: TextStyle(
                     fontSize: 28,
@@ -103,17 +137,19 @@ class _DashState extends State<Dash> {
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   'Pilih layanan terbaik untuk hewan kesayangan Anda',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.black54,
+                    color: Colors.grey[700],
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
+          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
@@ -253,48 +289,92 @@ class ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 8,
+      shadowColor: Colors.purple.withOpacity(0.2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-              child: Image.asset(
-                imagePath,
-                height: 150,
-                fit: BoxFit.cover,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+              child: Stack(
+                children: [
+                  Image.asset(
+                    imagePath,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.6),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(12),
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
                   Text(
                     subtitle,
                     style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
+                      color: Colors.grey[700],
+                      fontSize: 16,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: onTap,
-                    child: const Text('Book Now'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purple[400],
-                      minimumSize: const Size(double.infinity, 36),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 4,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.pets_rounded),
+                        SizedBox(width: 8),
+                        Text(
+                          'Book Now',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

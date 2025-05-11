@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../database/db_helper.dart';
-import 'package:wellpage/pet/dasboard.dart'; // Add this import at the top
+import 'package:wellpage/pet/dasboard.dart';
+import 'payment_hotel.dart';  
 
 class HotelForm extends StatefulWidget {
   const HotelForm({super.key});
@@ -30,7 +31,9 @@ class _HotelFormState extends State<HotelForm> {
     if (_formKey.currentState!.validate() && 
         selectedPetType != null && 
         selectedPackage != null && 
-        selectedDelivery != null) {
+        selectedDelivery != null &&
+        checkInDate != null &&
+        checkOutDate != null) {
       try {
         final data = {
           'owner_name': ownerNameController.text,
@@ -51,25 +54,20 @@ class _HotelFormState extends State<HotelForm> {
         
         if (mounted) {
           if (success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Booking hotel berhasil! Silahkan cek status pesanan Anda di dashboard.',
-                  style: TextStyle(color: Colors.white),
-                ),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 3),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            
-            // Navigate to Dashboard
-            Navigator.pushAndRemoveUntil(
+            // Calculate total amount
+            final daysStay = checkOutDate!.difference(checkInDate!).inDays;
+            final pricePerDay = selectedPackage == 'Regular' ? 35000.0 : 50000.0;
+            final totalAmount = daysStay * pricePerDay;
+
+            // Navigate to Payment Screen
+            Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const Dash(),
+                builder: (context) => PaymentHotel(
+                  bookingId: success.toString(),
+                  amount: totalAmount,
+                ),
               ),
-              (route) => false,
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(

@@ -41,7 +41,7 @@ class _ProfileSectionState extends State<ProfileSection> {
   @override
   void initState() {
     super.initState();
-    _initDatabase();
+    _loadUserData();
   }
 
   Future<void> _loadUserData() async {
@@ -50,10 +50,15 @@ class _ProfileSectionState extends State<ProfileSection> {
         path_package.join(await getDatabasesPath(), 'flutter_auth.db'),
       );
       
-      final List<Map<String, dynamic>> users = await database.query('users', limit: 1);
+      final List<Map<String, dynamic>> users = await database.query('users', 
+        where: 'is_logged_in = ?', 
+        whereArgs: [1],
+        limit: 1
+      );
+
       if (users.isNotEmpty) {
         setState(() {
-          nameController.text = users[0]['name'] ?? '';
+          nameController.text = users[0]['username'] ?? '';
           phoneController.text = users[0]['phone'] ?? '';
           emailController.text = users[0]['email'] ?? '';
         });
@@ -190,43 +195,39 @@ class _ProfileSectionState extends State<ProfileSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const CircleAvatar(
-            radius: 50,
-            backgroundColor: Colors.grey,
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Rosa',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Stack(
+            alignment: Alignment.center,
             children: [
-              const Text(
-                'Informasi Akun',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              IconButton(
-                icon: Icon(isEditing ? Icons.save : Icons.edit),
-                onPressed: () {
-                  if (isEditing) {
-                    _saveUserData();
-                  } else {
-                    setState(() => isEditing = true);
-                  }
-                },
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.purple[100],
+                child: Text(
+                  nameController.text.isNotEmpty ? 
+                    nameController.text[0].toUpperCase() : 
+                    '?',
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.purple[800],
+                  ),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          _buildInfoField('Nama', nameController),
-          _buildInfoField('No Handphone', phoneController),
-          _buildInfoField('Email', emailController),
-          const SizedBox(height: 24),
-          const Text(
-            'Pertanyaan yang sering ditanyakan',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Text(
+            nameController.text.isNotEmpty ? nameController.text : 'Loading...',
+            style: const TextStyle(
+              fontSize: 24, 
+              fontWeight: FontWeight.bold
+            ),
+          ),
+          Text(
+            emailController.text,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+            ),
           ),
           const SizedBox(height: 16),
           _buildFAQItem('Apakah bisa grooming tanpa booking?', 
