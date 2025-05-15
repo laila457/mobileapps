@@ -2,33 +2,55 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthController {
-  final String baseUrl = "http://localhost/api";
-  Future<bool> checkServerConnection() async {
+  final String baseUrl = 'http://localhost/mobileapps-1/login.php';
+
+  Future<Map<String, dynamic>> login(String email, String password) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/health_check.php'));
-      return response.statusCode == 200;
+      final response = await http.post(
+        Uri.parse('$baseUrl/login.php'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: {
+          'email': email,
+          'password': password,
+        },
+      );
+
+      return jsonDecode(response.body);
     } catch (e) {
-      return false;
+      return {
+        'status': 'error',
+        'message': 'Connection failed: $e',
+      };
     }
   }
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/login.php'),
-      body: {"email": email, "password": password},
-    );
-    return json.decode(response.body);
-  }
-
   Future<Map<String, dynamic>> register(
-    String name,
+    String username,
     String email,
+    String phone,
+    String address,
     String password,
   ) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/register.php'),
-      body: {"name": name, "email": email, "password": password},
-    );
-    return json.decode(response.body);
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/register.php'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: {
+          'username': username,
+          'email': email,
+          'phone': phone,
+          'address': address,
+          'password': password,
+          'role': 'user',
+        },
+      );
+
+      return jsonDecode(response.body);
+    } catch (e) {
+      return {
+        'status': 'error',
+        'message': 'Connection failed: $e',
+      };
+    }
   }
 }

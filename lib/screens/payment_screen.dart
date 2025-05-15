@@ -1,71 +1,122 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:http_parser/http_parser.dart';  // Add this import
+import 'dart:io';
+import 'dart:convert';
 import 'package:wellpage/pet/dasboard.dart';
 import 'package:wellpage/database/database_helper.dart';
+import 'package:flutter/foundation.dart';
+import 'package:path/path.dart' as path;
 
 class PaymentScreen extends StatefulWidget {
   final String bookingId;
   final double amount;
 
   const PaymentScreen({
-    Key? key, 
-    required this.bookingId, 
-    required this.amount
-  }) : super(key: key);
+    super.key,
+    required this.bookingId,
+    required this.amount,
+  });
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  String? selectedPaymentMethod;
+  String selectedMethod = '';
+  XFile? imageFile;  // Change to XFile
+  bool isLoading = false;
 
-  final Map<String, List<String>> paymentMethods = {
-    'E-Wallet': ['DANA', 'OVO', 'GoPay', 'ShopeePay'],
-    'Bank Transfer': ['BCA', 'Mandiri', 'BNI', 'BRI'],
-    'Virtual Account': ['BCA VA', 'Mandiri VA', 'BNI VA', 'BRI VA'],
-  };
-
-  Future<void> _processPayment() async {
-    if (selectedPaymentMethod == null) {
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    try {
+      final XFile? pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+      );
+      
+      if (pickedFile != null) {
+        setState(() {
+          imageFile = pickedFile;  // Store XFile directly
+        });
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Silakan pilih metode pembayaran')),
+        SnackBar(content: Text('Error picking image: $e')),
+      );
+    }
+  }
+
+  // Update the import at the top
+
+  Future<void> _submitPayment() async {
+    if (selectedMethod.isEmpty || imageFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Pilih metode pembayaran dan upload bukti')),
       );
       return;
     }
 
+    setState(() => isLoading = true);
+
     try {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return const Center(child: CircularProgressIndicator());
-        },
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://localhost/mobileapps-1/create_payment.php'),
       );
 
-      // Simulate payment processing
-      await Future.delayed(const Duration(seconds: 2));
+      request.fields['booking_id'] = widget.bookingId;
+      request.fields['payment_method'] = selectedMethod;
+      request.fields['status_pembayaran'] = 'pending';  // Add status
+      
+      // Handle file upload
+      final bytes = await imageFile!.readAsBytes();
+      final filename = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+      
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'bukti_transaksi',
+          bytes,
+          filename: filename,
+          contentType: MediaType('image', 'jpeg'),
+        ),
+      );
 
-      if (mounted) {
-        Navigator.pop(context); // Close loading dialog
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Pembayaran berhasil!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const Dash()),
-          (route) => false,
-        );
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      
+      if (response.statusCode == 200) {
+        var result = jsonDecode(response.body);
+        if (result['success']) {
+          if (mounted) {
+            await Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Dash(),
+                settings: const RouteSettings(name: '/dashboard'),
+              ),
+              (route) => false,
+            );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Pembayaran berhasil')),
+            );
+          }
+        } else {
+          throw Exception(result['message'] ?? 'Failed to process payment');
+        }
+      } else {
+        throw Exception('Server error: ${response.statusCode}');
       }
     } catch (e) {
-      Navigator.pop(context); // Close loading dialog
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Pembayaran gagal: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => isLoading = false);
     }
   }
 
@@ -76,92 +127,116 @@ class _PaymentScreenState extends State<PaymentScreen> {
         title: const Text('Pembayaran'),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Card(
-              elevation: 4,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Ringkasan Pembayaran',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      'Total Pembayaran',
+                      style: TextStyle(fontSize: 16),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     Text(
-                      'Total: Rp ${widget.amount.toStringAsFixed(0)}',
+                      'Rp ${widget.amount.toStringAsFixed(2)}',
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    Text('ID Booking: ${widget.bookingId}'),
                   ],
                 ),
               ),
             ),
-
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             const Text(
-              'Pilih Metode Pembayaran',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              'Metode Pembayaran',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
-
-            for (var method in paymentMethods.entries)
-              ExpansionTile(
-                title: Text(method.key),
-                children: method.value.map((channel) {
-                  return RadioListTile<String>(
-                    title: Text(channel),
-                    value: channel,
-                    groupValue: selectedPaymentMethod,
-                    onChanged: (value) {
-                      setState(() => selectedPaymentMethod = value);
-                    },
-                  );
-                }).toList(),
-              ),
-
-            const SizedBox(height: 20),
-            if (selectedPaymentMethod != null)
-              Card(
-                color: Colors.blue.shade50,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Metode Pembayaran: $selectedPaymentMethod',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 5),
-                      const Text('Klik Bayar Sekarang untuk melanjutkan pembayaran'),
-                    ],
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: [
+                'DANA',
+                'OVO',
+                'GoPay',
+                'Bank Transfer',
+              ].map((method) => ChoiceChip(
+                label: Text(method),
+                selected: selectedMethod == method,
+                onSelected: (selected) {
+                  setState(() => selectedMethod = selected ? method : '');
+                },
+              )).toList(),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Upload Bukti Pembayaran',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            if (imageFile != null)
+              FutureBuilder<Uint8List>(
+                future: imageFile!.readAsBytes(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Image.memory(
+                          snapshot.data!,
+                          height: 200,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            setState(() => imageFile = null);
+                          },
+                        ),
+                      ],
+                    );
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
+              )
+            else
+              InkWell(
+                onTap: _pickImage,
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.upload_file, size: 48),
+                        Text('Tap untuk upload bukti'),
+                      ],
+                    ),
                   ),
                 ),
               ),
-
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _processPayment,
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
-                backgroundColor: Colors.blue,
-              ),
-              child: const Text(
-                'Bayar Sekarang',
-                style: TextStyle(fontSize: 18),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: isLoading ? null : _submitPayment,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: isLoading
+                    ? const CircularProgressIndicator()
+                    : const Text('Konfirmasi Pembayaran'),
               ),
             ),
           ],

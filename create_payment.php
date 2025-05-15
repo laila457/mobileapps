@@ -1,57 +1,60 @@
+
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: POST');
 
-include 'connection.php';
+$host = 'localhost';
+$database = 'happypaws';
+$username = 'root';
+$password = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        $booking_id = $_POST['booking_id'];
-        $amount = $_POST['amount'];
-        $payment_method = $_POST['payment_method'];
-        $booking_type = $_POST['booking_type'];
+try {
+    $conn = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Begin transaction
-        $conn->begin_transaction();
-
-        // Insert payment record
-        $query = "INSERT INTO payments (booking_id, booking_type, amount, payment_method, payment_status) 
-                 VALUES (?, ?, ?, ?, 'paid')";
-        
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("isds", $booking_id, $booking_type, $amount, $payment_method);
-        $stmt->execute();
-
-        // Update booking status
-        $updateQuery = "UPDATE pet_grooming SET status = 'confirmed' WHERE id = ?";
-        $updateStmt = $conn->prepare($updateQuery);
-        $updateStmt->bind_param("i", $booking_id);
-        $updateStmt->execute();
-
-        // Commit transaction
-        $conn->commit();
-
-        echo json_encode([
-            'success' => true,
-            'message' => 'Payment processed successfully'
-        ]);
-
-    } catch (Exception $e) {
-        // Rollback on error
-        $conn->rollback();
-        
-        echo json_encode([
-            'success' => false,
-            'message' => 'Error: ' . $e->getMessage()
-        ]);
+    // Handle file upload
+    if (!isset($_FILES['bukti_transaksi'])) {
+        throw new Exception('No file uploaded');
     }
-} else {
+
+    $file = $_FILES['bukti_transaksi'];
+    $fileName = time() . '_' . $file['name'];
+    $uploadPath = 'uploads/' . $fileName;
+    
+    // Create uploads directory if it doesn't exist
+    if (!file_exists('uploads')) {
+        mkdir('uploads', 0777, true);
+    }
+
+    // Move uploaded file
+    if (!move_uploaded_file($file['tmp_name'], $uploadPath)) {
+        throw new Exception('Failed to upload file');
+    }
+
+    // Update database
+    $stmt = $conn->prepare("UPDATE grooming SET 
+        metode_pembayaran = ?,
+        bukti_transaksi = ?,
+        status_pembayaran = ?
+        WHERE id = ?");
+
+    $stmt->execute([
+        $_POST['payment_method'],
+        $fileName,
+        $_POST['status_pembayaran'],
+        $_POST['booking_id']
+    ]);
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Payment updated successfully'
+    ]);
+
+} catch(Exception $e) {
+    http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Invalid request method'
+        'message' => $e->getMessage()
     ]);
 }
-
-$conn->close();
 ?>

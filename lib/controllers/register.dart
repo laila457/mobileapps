@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import '../controllers/auth_controller.dart';
 import 'login_screen.dart';
 
@@ -120,3 +120,4 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 }
+*/

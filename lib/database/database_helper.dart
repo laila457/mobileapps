@@ -1,25 +1,90 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:mysql1/mysql1.dart';
 
 class DatabaseHelper {
   static const String baseUrl = 'http://localhost/wellpage/create.php';
 
-  static Future<bool> createGroomingReservation(Map<String, dynamic> data) async {
+  static Future<dynamic> createGroomingReservation(Map<String, dynamic> data) async {
     try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/create.php'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(data),
+      final conn = await MySqlConnection.connect(ConnectionSettings(
+        host: 'localhost',
+        port: 3306,
+        user: 'root',
+        password: '',
+        db: 'happypaws'
+      ));
+
+      var result = await conn.query(
+        'INSERT INTO grooming ('
+        'tanggal_grooming, waktu_booking, nama_pemilik, no_hp, '
+        'jenis_hewan, paket_grooming, pengantaran, kecamatan, '
+        'desa, detail_alamat, total_harga, metode_pembayaran, status_pembayaran) '
+        'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [
+          data['tanggal_grooming'],
+          data['waktu_booking'],
+          data['nama_pemilik'],
+          data['no_hp'],
+          data['jenis_hewan'],
+          data['paket_grooming'],
+          data['pengantaran'],
+          data['kecamatan'],
+          data['desa'],
+          data['detail_alamat'],
+          data['total_harga'],
+          data['metode_pembayaran'],
+          data['status_pembayaran'],
+        ]
       );
 
-      if (response.statusCode == 200) {
-        final result = jsonDecode(response.body);
-        return result['success'] == true;
-      }
-      return false;
+      await conn.close();
+      return result.insertId;
     } catch (e) {
-      print('Error: $e');
-      return false;
+      print('Database error: $e');
+      return null;
+    }
+  }
+
+  static Future<dynamic> createHotelReservation(Map<String, dynamic> data) async {
+    try {
+      final conn = await MySqlConnection.connect(ConnectionSettings(
+        host: 'localhost',
+        port: 3306,
+        user: 'root',
+        password: '',
+        db: 'happypaws'
+      ));
+
+      var result = await conn.query(
+        'INSERT INTO penitipan ('
+        'check_in, check_out, nama_pemilik, no_hp, nama_hewan, '
+        'jenis_hewan, paket_penitipan, pengantaran, kecamatan, '
+        'desa, detail_alamat, catatan, total_harga, metode_pembayaran) '
+        'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [
+          data['check_in'],
+          data['check_out'],
+          data['nama_pemilik'],
+          data['no_hp'],
+          data['nama_hewan'],
+          data['jenis_hewan'],
+          data['paket_penitipan'],
+          data['pengantaran'],
+          data['kecamatan'],
+          data['desa'],
+          data['detail_alamat'],
+          data['catatan'],
+          data['total_harga'],
+          data['metode_pembayaran'],
+        ]
+      );
+
+      await conn.close();
+      return result.insertId;
+    } catch (e) {
+      print('Database error: $e');
+      return null;
     }
   }
 

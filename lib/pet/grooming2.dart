@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/pet/formbooking.dart';
 import 'package:wellpage/pet/layanantrue.dart';
+import 'package:wellpage/screens/booking_grooming_form.dart';
 import 'package:wellpage/screens/grooming_form.dart';
 import 'package:wellpage/pet/profile.dart';
 
@@ -141,7 +142,7 @@ class _GroomingsPageState extends State<GroomingsPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => GroomingForm()),
+                        MaterialPageRoute(builder: (context) => BookingGroomingForm()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

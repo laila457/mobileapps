@@ -16,94 +16,54 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   final _formSignupKey = GlobalKey<FormState>();
   bool agreePersonalData = true;
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
+
+  // Consolidated controllers
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final AuthController authController =
-      AuthController(); // Instance of AuthController
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
 
   Future<void> _register() async {
-    if (_formKey.currentState!.validate()) {
-      final response = await http.post(
-        Uri.parse(
-            'http://192.168.5.73/api/save_booking.php'), // Gantidengan URL API register Anda
-        headers: <String, String>{
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: {
-          'name': _nameController.text,
-          'email': _emailController.text,
-          'password': _passwordController.text,
-// Jika API Anda mengharapkan password_confirmation
-          'password_confirmation': _confirmPasswordController.text,
-        },
-      );
-      if (response.statusCode == 201) {
-        final data = jsonDecode(response.body);
-// Handle respons pendaftaran yang berhasil
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-                  '${data['message']}, Silahkan Login untuk mengakses aplikasi !')),
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Signin()),
-        );
-      } else {
-        final error = jsonDecode(response.body);
-// Handle respons pendaftaran yang gagal
-        String errorMessage = 'Registrasi Gagal';
-        if (error.containsKey('message')) {
-          errorMessage = error['message'];
-        } else if (error.containsKey('errors')) {
-// Tampilkan pesan kesalahan validasi
-          errorMessage = error['errors'].values.join('\n');
-        }
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMessage)),
-        );
-      }
-    }
-  }
-
-  void register() async {
     if (_formSignupKey.currentState!.validate() && agreePersonalData) {
-      final response = await authController.register(
-        nameController.text,
-        emailController.text,
-        passwordController.text,
-      );
-
-      // Show feedback based on registration success or failure
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(response['message']),
-          backgroundColor:
-              response['status'] == 'success' ? Colors.green : Colors.red,
-        ),
-      );
-
-      // Optional: Navigate to Signin after successful registration
-      if (response['status'] == 'success') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const Signin()),
+      try {
+        final response = await http.post(
+          Uri.parse('http://localhost/mobileapps-1/register.php'),
+          headers: <String, String>{
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: {
+            'username': usernameController.text,
+            'email': emailController.text,
+            'phone': phoneController.text,
+            'address': addressController.text,
+            'password': passwordController.text,
+            'role': 'user',
+          },
         );
+
+        final result = jsonDecode(response.body);
+        if (result['status'] == 'success') {
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const Signin()),
+            );
+          }
+        } else {
+          throw Exception(result['message']);
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Registration failed: $e')),
+          );
+        }
       }
-    } else if (!agreePersonalData) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Please agree to the processing of personal data')),
-      );
     }
   }
 
+  // Update the form fields in build method
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -174,7 +134,7 @@ class _SignupState extends State<Signup> {
 
                       // Full Name
                       TextFormField(
-                        controller: nameController,
+                        controller: usernameController,  // Changed from nameController
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Full Name';
@@ -191,8 +151,7 @@ class _SignupState extends State<Signup> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.purple.shade200),
+                            borderSide: BorderSide(color: Colors.purple.shade200),
                             borderRadius: BorderRadius.circular(15),
                           ),
                           focusedBorder: OutlineInputBorder(
@@ -203,7 +162,7 @@ class _SignupState extends State<Signup> {
                       ),
                       const SizedBox(height: 25.0),
 
-                      // Email
+                      // Email field
                       TextFormField(
                         controller: emailController,
                         validator: (value) {
@@ -224,7 +183,53 @@ class _SignupState extends State<Signup> {
                       ),
                       const SizedBox(height: 25.0),
 
-                      // Password
+                      // Add Phone field
+                      TextFormField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter Phone Number';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          label: const Text('Phone Number'),
+                          hintText: 'Enter Phone Number',
+                          prefixIcon: const Icon(Icons.phone_outlined),
+                          hintStyle: const TextStyle(color: Colors.black26),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 25.0),
+
+                      // Add Address field
+                      TextFormField(
+                        controller: addressController,
+                        maxLines: 2,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter Address';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          label: const Text('Address'),
+                          hintText: 'Enter Address',
+                          prefixIcon: const Icon(Icons.location_on_outlined),
+                          hintStyle: const TextStyle(color: Colors.black26),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 25.0),
+
+                      // Password field
                       TextFormField(
                         controller: passwordController,
                         obscureText: true,
@@ -278,7 +283,7 @@ class _SignupState extends State<Signup> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: register, // Call the register function
+                          onPressed: _register,
                           child: const Text('Sign up'),
                         ),
                       ),

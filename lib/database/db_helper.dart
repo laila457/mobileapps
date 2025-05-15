@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class DatabaseHelper {
-  static const String baseUrl = 'http://localhost/wellpage/create_hotel.php';
+  static const String baseUrl = 'http://localhost/mobileapps-1/create_penitipan.php';
 
   static Future<bool> createHotelReservation(Map<String, dynamic> data) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/create_hotel.php'),
+        Uri.parse('$baseUrl/create_penitipan.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(data),
       );
@@ -44,7 +44,7 @@ class DatabaseHelper {
   static Future<bool> updatePaymentStatus(String bookingId, String paymentMethod) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/update_payment_status.php'),
+        Uri.parse('$baseUrl/update_payment_stat.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'booking_id': bookingId,
@@ -61,6 +61,22 @@ class DatabaseHelper {
       return false;
     } catch (e) {
       print('Error: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> createPenitipanBooking(Map<String, dynamic> data) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost/mobileapps-1/create_penitipan.php'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: data,
+      );
+
+      final result = jsonDecode(response.body);
+      return result['status'] == 'success';
+    } catch (e) {
+      print('Error creating booking: $e');
       return false;
     }
   }

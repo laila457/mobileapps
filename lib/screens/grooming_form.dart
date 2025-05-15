@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../database/database_helper.dart';
 import 'package:wellpage/pet/dasboard.dart'; // Add this import at the top
-import 'package:wellpage/screens/payment_screen.dart'; // Add this import at the top
 
 class GroomingForm extends StatefulWidget {
   const GroomingForm({super.key});
@@ -31,50 +30,48 @@ class _GroomingFormState extends State<GroomingForm> {
     if (_formKey.currentState!.validate() && 
         selectedPetType != null && 
         selectedPackage != null && 
-        selectedDelivery != null) {
+        selectedDelivery != null &&
+        selectedDate != null &&
+        selectedTime != null) {
       try {
+        // Calculate total price based on package
+        double totalPrice = selectedPackage == 'Basic' ? 59000 :
+                          selectedPackage == 'Kutu & Jamur' ? 70000 : 86000;
+
         final data = {
-          'owner_name': ownerNameController.text,
-          'pet_name': petNameController.text,
-          'pet_type': selectedPetType,
-          'service_date': DateFormat('yyyy-MM-dd').format(selectedDate!),
-          'service_time': '${selectedTime!.hour}:${selectedTime!.minute}:00',
-          'phone_number': phoneController.text,
-          'package': selectedPackage,
-          'delivery_type': selectedDelivery,
+          'tanggal_grooming': DateFormat('yyyy-MM-dd').format(selectedDate!),
+          'waktu_booking': '${selectedTime!.hour}:${selectedTime!.minute}:00',
+          'nama_pemilik': ownerNameController.text,
+          'no_hp': phoneController.text,
+          'jenis_hewan': selectedPetType,
+          'paket_grooming': selectedPackage,
+          'pengantaran': selectedDelivery,
           'kecamatan': selectedDelivery == 'Antar Jemput' ? selectedKecamatan : null,
-          'kelurahan': selectedDelivery == 'Antar Jemput' ? selectedKelurahan : null,
-          'address': selectedDelivery == 'Antar Jemput' ? addressController.text : null,
-          'notes': notesController.text,
+          'desa': selectedDelivery == 'Antar Jemput' ? selectedKelurahan : null,
+          'detail_alamat': selectedDelivery == 'Antar Jemput' ? addressController.text : null,
+          'total_harga': totalPrice,
+          'metode_pembayaran': 'pending',
+          'status_pembayaran': 'pending',
         };
 
         final success = await DatabaseHelper.createGroomingReservation(data);
         
         if (mounted) {
           if (success) {
-            // Get package price
-            double amount = selectedPackage == 'Basic' ? 59000 :
-                          selectedPackage == 'Kutu & Jamur' ? 70000 : 86000;
-
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => PaymentScreen(
-                  bookingId: success.toString(), // Assuming createGroomingReservation returns the booking ID
-                  amount: amount,
+                  bookingId: success.toString(),
+                  amount: totalPrice,
                 ),
               ),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text(
-                  'Gagal membuat booking. Silakan coba lagi.',
-                  style: TextStyle(color: Colors.white),
-                ),
+                content: Text('Gagal membuat booking. Silakan coba lagi.'),
                 backgroundColor: Colors.red,
-                duration: Duration(seconds: 3),
-                behavior: SnackBarBehavior.floating,
               ),
             );
           }
@@ -88,7 +85,7 @@ class _GroomingFormState extends State<GroomingForm> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all required fields')),
+        const SnackBar(content: Text('Mohon lengkapi semua field yang diperlukan')),
       );
     }
   }
@@ -359,4 +356,4 @@ class _GroomingFormState extends State<GroomingForm> {
       ),
     );
   }
-}
+}*/

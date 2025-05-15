@@ -34,7 +34,7 @@ dependencies:
   firebase_core: ^2.15.1
   google_fonts: ^5.1.0
   icons_plus: ^1.0.0
-  image_picker: ^0.8.4+2
+  image_picker: ^1.0.4
   date_time_pro: ^1.0.0
   sqflite_common_ffi: ^2.3.5
   # The following adds the Cupertino Icons font to your application.
@@ -47,6 +47,7 @@ dependencies:
   path: ^1.8.3
   mysql1: ^0.20.0
   flutter_local_notifications: ^16.3.0  # Added with specific version
+  http_parser: ^4.0.2
 
 dev_dependencies:
   flutter_test:
