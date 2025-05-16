@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:mysql1/mysql1.dart';
 
 class DatabaseHelper {
-  static const String baseUrl = 'http://localhost/wellpage/create.php';
+  static const String baseUrl = 'http://localhost/mobileapps/create.php';
 
   static Future<dynamic> createGroomingReservation(Map<String, dynamic> data) async {
     try {

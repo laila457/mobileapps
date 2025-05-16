@@ -28,7 +28,7 @@ class _SignupState extends State<Signup> {
     if (_formSignupKey.currentState!.validate() && agreePersonalData) {
       try {
         final response = await http.post(
-          Uri.parse('http://localhost/mobileapps-1/register.php'),
+          Uri.parse('http://localhost/mobileapps/register.php'),
           headers: <String, String>{
             'Content-Type': 'application/x-www-form-urlencoded',
           },

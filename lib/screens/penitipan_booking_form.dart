@@ -53,7 +53,7 @@ class _PenitipanBookingFormState extends State<PenitipanBookingForm> {
       
       try {
         final response = await http.post(
-          Uri.parse('http://localhost/mobileapps-1/create_penitipan.php'),
+          Uri.parse('http://localhost/mobileapps/create_penitipan.php'),
           headers: <String, String>{
             'Content-Type': 'application/x-www-form-urlencoded',
           },
@@ -103,226 +103,332 @@ class _PenitipanBookingFormState extends State<PenitipanBookingForm> {
 
   @override
   Widget build(BuildContext context) {
+    final lightPurple = Color(0xFFE0D4F6);
+    final mediumPurple = Color(0xFFB19CD9);
+    final darkPurple = Color(0xFF8B6BB7);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Form Penitipan Hewan'),
+        title: Row(
+          children: [
+            Icon(Icons.pets, color: Colors.white),
+            SizedBox(width: 8),
+            Text('Pet Hotel Booking'),
+          ],
+        ),
+        backgroundColor: darkPurple,
+        elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: namaPemilikController,
-                decoration: const InputDecoration(
-                  labelText: 'Nama Pemilik',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
-              ),
-              const SizedBox(height: 16),
-              
-              TextFormField(
-                controller: noHpController,
-                decoration: const InputDecoration(
-                  labelText: 'Nomor HP',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.phone,
-                validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
-              ),
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: namaHewanController,
-                decoration: const InputDecoration(
-                  labelText: 'Nama Hewan',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
-              ),
-              const SizedBox(height: 16),
-
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Jenis Hewan',
-                  border: OutlineInputBorder(),
-                ),
-                value: selectedJenisHewan,
-                items: ['Anjing', 'Kucing'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() => selectedJenisHewan = value);
-                },
-                validator: (value) => value == null ? 'Wajib dipilih' : null,
-              ),
-              const SizedBox(height: 16),
-
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Paket Penitipan',
-                  border: OutlineInputBorder(),
-                ),
-                value: selectedPaket,
-                items: [
-                  DropdownMenuItem(
-                    value: 'Regular',
-                    child: Text('Regular - Rp ${paketHarga['Regular']?.toStringAsFixed(0)}/hari'),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [lightPurple, Colors.white],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  controller: namaPemilikController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nama Pemilik',
+                    border: OutlineInputBorder(),
                   ),
-                  DropdownMenuItem(
-                    value: 'Premium',
-                    child: Text('Premium - Rp ${paketHarga['Premium']?.toStringAsFixed(0)}/hari'),
+                  validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
+                ),
+                const SizedBox(height: 16),
+                
+                TextFormField(
+                  controller: noHpController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nomor HP',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.phone,
+                  validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
+                ),
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: namaHewanController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nama Hewan',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
+                ),
+                const SizedBox(height: 16),
+
+                DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                    labelText: 'Jenis Hewan',
+                    border: OutlineInputBorder(),
+                  ),
+                  value: selectedJenisHewan,
+                  items: ['Anjing', 'Kucing'].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() => selectedJenisHewan = value);
+                  },
+                  validator: (value) => value == null ? 'Wajib dipilih' : null,
+                ),
+                const SizedBox(height: 16),
+
+                DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                    labelText: 'Paket Penitipan',
+                    border: OutlineInputBorder(),
+                  ),
+                  value: selectedPaket,
+                  items: [
+                    DropdownMenuItem(
+                      value: 'Regular',
+                      child: Text('Regular - Rp ${paketHarga['Regular']?.toStringAsFixed(0)}/hari'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Premium',
+                      child: Text('Premium - Rp ${paketHarga['Premium']?.toStringAsFixed(0)}/hari'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() => selectedPaket = value);
+                  },
+                  validator: (value) => value == null ? 'Wajib dipilih' : null,
+                ),
+                const SizedBox(height: 16),
+
+                ListTile(
+                  title: Text(checkInDate == null 
+                    ? 'Pilih Tanggal Check-in' 
+                    : 'Check-in: ${DateFormat('dd/MM/yyyy').format(checkInDate!)}'),
+                  trailing: const Icon(Icons.calendar_today),
+                  onTap: () async {
+                    final date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now().add(const Duration(days: 90)),
+                    );
+                    if (date != null) {
+                      setState(() => checkInDate = date);
+                    }
+                  },
+                ),
+
+                ListTile(
+                  title: Text(checkOutDate == null 
+                    ? 'Pilih Tanggal Check-out' 
+                    : 'Check-out: ${DateFormat('dd/MM/yyyy').format(checkOutDate!)}'),
+                  trailing: const Icon(Icons.calendar_today),
+                  onTap: () async {
+                    final date = await showDatePicker(
+                      context: context,
+                      initialDate: checkInDate ?? DateTime.now(),
+                      firstDate: checkInDate ?? DateTime.now(),
+                      lastDate: DateTime.now().add(const Duration(days: 90)),
+                    );
+                    if (date != null) {
+                      setState(() => checkOutDate = date);
+                    }
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                    labelText: 'Pengantaran',
+                    border: OutlineInputBorder(),
+                  ),
+                  value: selectedPengantaran,
+                  items: ['Datang Sendiri', 'Antar Jemput'].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() => selectedPengantaran = value);
+                  },
+                  validator: (value) => value == null ? 'Wajib dipilih' : null,
+                ),
+
+                if (selectedPengantaran == 'Antar Jemput') ...[
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.location_on, color: darkPurple),
+                              SizedBox(width: 8),
+                              Text(
+                                'Detail Lokasi',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: darkPurple,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          DropdownButtonFormField<String>(
+                            decoration: InputDecoration(
+                              labelText: 'Kecamatan',
+                              prefixIcon: Icon(Icons.map, color: darkPurple),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            value: selectedKecamatan,
+                            items: ['Telukjambe Timur'].map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() => selectedKecamatan = value);
+                            },
+                            validator: (value) => value == null ? 'Wajib dipilih' : null,
+                          ),
+                          SizedBox(height: 16),
+                          DropdownButtonFormField<String>(
+                            decoration: InputDecoration(
+                              labelText: 'Desa',
+                              prefixIcon: Icon(Icons.location_city, color: darkPurple),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            value: selectedDesa,
+                            items: ['Sukaharja', 'Pinayungan', 'Puseurjaya'].map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() => selectedDesa = value);
+                            },
+                            validator: (value) => value == null ? 'Wajib dipilih' : null,
+                          ),
+                          SizedBox(height: 16),
+                          TextFormField(
+                            controller: alamatController,
+                            decoration: InputDecoration(
+                              labelText: 'Detail Alamat',
+                              prefixIcon: Icon(Icons.home, color: darkPurple),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            maxLines: 3,
+                            validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
-                onChanged: (value) {
-                  setState(() => selectedPaket = value);
-                },
-                validator: (value) => value == null ? 'Wajib dipilih' : null,
-              ),
-              const SizedBox(height: 16),
-
-              ListTile(
-                title: Text(checkInDate == null 
-                  ? 'Pilih Tanggal Check-in' 
-                  : 'Check-in: ${DateFormat('dd/MM/yyyy').format(checkInDate!)}'),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(const Duration(days: 90)),
-                  );
-                  if (date != null) {
-                    setState(() => checkInDate = date);
-                  }
-                },
-              ),
-
-              ListTile(
-                title: Text(checkOutDate == null 
-                  ? 'Pilih Tanggal Check-out' 
-                  : 'Check-out: ${DateFormat('dd/MM/yyyy').format(checkOutDate!)}'),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: checkInDate ?? DateTime.now(),
-                    firstDate: checkInDate ?? DateTime.now(),
-                    lastDate: DateTime.now().add(const Duration(days: 90)),
-                  );
-                  if (date != null) {
-                    setState(() => checkOutDate = date);
-                  }
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Pengantaran',
-                  border: OutlineInputBorder(),
-                ),
-                value: selectedPengantaran,
-                items: ['Datang Sendiri', 'Antar Jemput'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() => selectedPengantaran = value);
-                },
-                validator: (value) => value == null ? 'Wajib dipilih' : null,
-              ),
-
-              if (selectedPengantaran == 'Antar Jemput') ...[
-                const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    labelText: 'Kecamatan',
-                    border: OutlineInputBorder(),
-                  ),
-                  value: selectedKecamatan,
-                  items: ['Telukjambe Timur'].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() => selectedKecamatan = value);
-                  },
-                  validator: (value) => value == null ? 'Wajib dipilih' : null,
-                ),
-
-                const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    labelText: 'Desa',
-                    border: OutlineInputBorder(),
-                  ),
-                  value: selectedDesa,
-                  items: ['Sukaharja', 'Pinayungan', 'Puseurjaya'].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() => selectedDesa = value);
-                  },
-                  validator: (value) => value == null ? 'Wajib dipilih' : null,
-                ),
 
                 const SizedBox(height: 16),
                 TextFormField(
-                  controller: alamatController,
+                  controller: catatanController,
                   decoration: const InputDecoration(
-                    labelText: 'Detail Alamat',
+                    labelText: 'Catatan Khusus',
                     border: OutlineInputBorder(),
                   ),
                   maxLines: 3,
-                  validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
                 ),
-              ],
 
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: catatanController,
-                decoration: const InputDecoration(
-                  labelText: 'Catatan Khusus',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
-              ),
+                const SizedBox(height: 24),
+                if (checkInDate != null && checkOutDate != null && selectedPaket != null)
+                
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: darkPurple,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: darkPurple.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Total Harga',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          'Rp ${calculateTotalPrice().toStringAsFixed(0)}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
-              const SizedBox(height: 24),
-              if (checkInDate != null && checkOutDate != null && selectedPaket != null)
-                Text(
-                  'Total Harga: Rp ${calculateTotalPrice().toStringAsFixed(0)}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                const SizedBox(height: 24),
+                Container(
+                  width: double.infinity,
+                  height: 55,
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: ElevatedButton(
+                    onPressed: _submitForm,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: darkPurple,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      elevation: 5,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.pets),
+                        SizedBox(width: 8),
+                        Text(
+                          'Buat Reservasi',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('Buat Reservasi'),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

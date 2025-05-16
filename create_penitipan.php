@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 
 $bukti_transaksi = null;
 if (isset($_FILES['bukti_transaksi']) && $_FILES['bukti_transaksi']['error'] === UPLOAD_ERR_OK) {
-    $upload_dir = 'assets/uploads/payments/';
+    $upload_dir = 'assets/uploads/payments';
     if (!file_exists($upload_dir)) {
         mkdir($upload_dir, 0777, true);
     }

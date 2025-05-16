@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class GroomingDatabase {
-  static const String baseUrl = 'http://localhost/mobileapps-1/api';
+  static const String baseUrl = 'http://localhost/mobileapps/api';
 
   static Future<Map<String, dynamic>> createBooking(Map<String, dynamic> data) async {
     final response = await http.post(

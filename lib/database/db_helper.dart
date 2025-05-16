@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class DatabaseHelper {
-  static const String baseUrl = 'http://localhost/mobileapps-1/create_penitipan.php';
+  static const String baseUrl = 'http://localhost/mobileapps/create_penitipan.php';
 
   static Future<bool> createHotelReservation(Map<String, dynamic> data) async {
     try {
@@ -68,7 +68,7 @@ class DatabaseHelper {
   static Future<bool> createPenitipanBooking(Map<String, dynamic> data) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost/mobileapps-1/create_penitipan.php'),
+        Uri.parse('http://localhost/mobileapps/create_penitipan.php'),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: data,
       );

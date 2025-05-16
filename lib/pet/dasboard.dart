@@ -410,3 +410,82 @@ class RequirementItem extends StatelessWidget {
     );
   }
 }
+
+// Add these helper methods at the bottom of the _DashState class
+Future<List<Map<String, dynamic>>> _fetchBookingHistory() async {
+  // TODO: Implement actual API call to fetch booking history
+  // This is a mock implementation
+  await Future.delayed(Duration(seconds: 1)); // Simulate network delay
+  return [
+    {
+      'tanggal_grooming': '2024-01-20',
+      'waktu_booking': '10:00',
+      'jenis_hewan': 'Kucing',
+      'paket_grooming': 'Premium',
+      'total_harga': '150000',
+      'status_pembayaran': 'pending',
+    },
+    // Add more mock data as needed
+  ];
+}
+
+Widget _buildStatusChip(String status) {
+  Color chipColor;
+  String displayStatus;
+  
+  switch (status.toLowerCase()) {
+    case 'pending':
+      chipColor = Colors.orange;
+      displayStatus = 'Pending';
+      break;
+    case 'completed':
+      chipColor = Colors.green;
+      displayStatus = 'Selesai';
+      break;
+    default:
+      chipColor = Colors.grey;
+      displayStatus = 'Unknown';
+  }
+
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+    decoration: BoxDecoration(
+      color: chipColor.withOpacity(0.1),
+      borderRadius: BorderRadius.circular(20),
+      border: Border.all(color: chipColor),
+    ),
+    child: Text(
+      displayStatus,
+      style: TextStyle(
+        color: chipColor,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  );
+}
+
+Widget _buildInfoRow(String label, String value) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 14,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+          ),
+        ),
+      ],
+    ),
+  );
+}

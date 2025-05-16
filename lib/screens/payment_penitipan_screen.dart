@@ -84,7 +84,7 @@ class _PaymentPenitipanScreenState extends State<PaymentPenitipanScreen> {
     });
 
     try {
-      final uri = Uri.parse('http://localhost/mobileapps-1/update_payment_penitipan.php');
+      final uri = Uri.parse('http://localhost/mobileapps/update_payment_penitipan.php');
       var request = http.MultipartRequest('POST', uri);
 
       request.fields.addAll({

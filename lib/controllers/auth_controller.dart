@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthController {
-  final String baseUrl = 'http://localhost/mobileapps-1/login.php';
+  final String baseUrl = 'http://localhost/mobileapps/login.php';
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {

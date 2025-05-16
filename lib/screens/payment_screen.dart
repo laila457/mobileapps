@@ -64,7 +64,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://localhost/mobileapps-1/create_payment.php'),
+        Uri.parse('http://localhost/mobileapps/create_payment.php'),
       );
 
       request.fields['booking_id'] = widget.bookingId;
@@ -212,7 +212,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 child: Container(
                   height: 200,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: const Color.fromARGB(255, 0, 255, 85)),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Center(

@@ -1,24 +1,60 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import '../screen/welcome.dart';  // Add this import
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart' as path_package;
+import '../screen/welcome.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomeScreens extends StatelessWidget {
-  const HomeScreens({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('Akun Saya'),
+        backgroundColor: Colors.white,
+        foregroundColor: Color(0xFF8B6BB7),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Logout'),
+                    content: Text('Apakah Anda yakin ingin keluar?'),
+                    actions: [
+                      TextButton(
+                        child: Text('Batal'),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      TextButton(
+                        child: Text('Ya'),
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                            (route) => false,
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ProfileSection(),
-            GallerySection(),
-            LogoutButton(),
-          ],
+        child: Container(
+          color: Color(0xFFFAF5FF),
+          child: ProfileSection(),
         ),
       ),
     );
@@ -26,351 +62,187 @@ class HomeScreens extends StatelessWidget {
 }
 
 class ProfileSection extends StatefulWidget {
-  const ProfileSection({super.key});
-
   @override
   _ProfileSectionState createState() => _ProfileSectionState();
 }
 
+// Update the state variables
 class _ProfileSectionState extends State<ProfileSection> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  bool isEditing = false;
+  String username = '';
+  String email = '';
+  String phone = '';
+  String address = '';
+  String profilePicture = '';
+  String role = '';
+  String createdAt = '';
+  bool isLoading = true;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
-  }
-
-  Future<void> _loadUserData() async {
-    try {
-      final database = await openDatabase(
-        path_package.join(await getDatabasesPath(), 'flutter_auth.db'),
-      );
-      
-      final List<Map<String, dynamic>> users = await database.query('users', 
-        where: 'is_logged_in = ?', 
-        whereArgs: [1],
-        limit: 1
-      );
-
-      if (users.isNotEmpty) {
-        setState(() {
-          nameController.text = users[0]['username'] ?? '';
-          phoneController.text = users[0]['phone'] ?? '';
-          emailController.text = users[0]['email'] ?? '';
-        });
-      }
-      await database.close();
-    } catch (e) {
-      print('Error loading user data: $e');
-    }
-  }
-
-  Future<void> _initDatabase() async {
-    try {
-      final database = await openDatabase(
-        path_package.join(await getDatabasesPath(), 'flutter_auth.db'),
-        version: 1,
-        onCreate: (db, version) async {
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              name TEXT,
-              phone TEXT,
-              email TEXT
-            )
-          ''');
-        },
-      );
-      await database.close();
-      await _loadUserData();
-    } catch (e) {
-      print('Error initializing database: $e');
-    }
-  }
-
-  Future<void> _saveUserData() async {
-    try {
-      final database = await openDatabase(
-        path_package.join(await getDatabasesPath(), 'flutter_auth.db'),
-      );
-      
-      // Try to update first
-      int updated = await database.update(
-        'users',
-        {
-          'name': nameController.text,
-          'phone': phoneController.text,
-          'email': emailController.text,
-        },
-        where: 'id = ?',
-        whereArgs: [1],
-      );
-  
-      // If no rows were updated, insert new data
-      if (updated == 0) {
-        await database.insert(
-          'users',
-          {
-            'name': nameController.text,
-            'phone': phoneController.text,
-            'email': emailController.text,
-          },
-        );
-      }
-      
-      await database.close();
-      setState(() => isEditing = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profil berhasil diperbarui')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
-  }
-
-  Widget _buildFAQItem(String question, String answer) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ListTile(
-        title: Text(question),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: () {
-          // Show answer in a dialog
-          if (answer.isNotEmpty) {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text(question),
-                content: Text(answer),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('Tutup'),
-                  ),
-                ],
-              ),
-            );
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _buildInfoField(String label, TextEditingController controller) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 14)),
-          TextFormField(
-            controller: controller,
-            enabled: isEditing,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              contentPadding: const EdgeInsets.all(12),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.purple[100],
-                child: Text(
-                  nameController.text.isNotEmpty ? 
-                    nameController.text[0].toUpperCase() : 
-                    '?',
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.purple[800],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            nameController.text.isNotEmpty ? nameController.text : 'Loading...',
-            style: const TextStyle(
-              fontSize: 24, 
-              fontWeight: FontWeight.bold
-            ),
-          ),
-          Text(
-            emailController.text,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 16),
-          _buildFAQItem('Apakah bisa grooming tanpa booking?', 
-              'Sebaiknya booking terlebih dahulu agar tidak antre..'),
-          _buildFAQItem('Apakah ada layanan antar jemput?', 
-              'Ya, kami menyediakan layanan antar jemput dengan biaya tambahan 20k untuk area Karawang.'),
-          _buildFAQItem('Apakah saja fasilitas layanan yang ada?', 
-              'Kami menyediakan beberapa layanan:\n\n'
-              '1. Basic Grooming (59k)\n'
-              '   - Mandi\n'
-              '   - Blow dry\n'
-              '   - Sisir\n\n'
-              '2. Grooming Anti Kutu & Jamur (70k)\n'
-              '   - Mandi khusus\n'
-              '   - Treatment anti kutu\n'
-              '   - Treatment anti jamur\n\n'
-              '3. Full Grooming (86k)\n'
-              '   - Semua layanan basic\n'
-              '   - Potong kuku\n'
-              '   - Pembersihan telinga\n'
-              '   - Styling'),
-        ],
-      ),
-    );
+    // Set up periodic data refresh
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) => _loadUserData());
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
+    _timer?.cancel();
     super.dispose();
   }
-}
 
-class StatsSection extends StatelessWidget {
-  const StatsSection({super.key});
+  Future<void> _loadUserData() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost/mobileapps/get_user_profile.php'),
+      ).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw Exception('Connection timeout');
+        },
+      );
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(
-            children: [
-              Text(
-                '120',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Text('Followers'),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                '80',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Text('Following'),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                '50',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Text('Posts'),
-            ],
-          ),
-        ],
-      ),
-    );
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        if (result['success'] && result['data'] != null) {
+          setState(() {
+            username = result['data']['username'] ?? '';
+            email = result['data']['email'] ?? '';
+            phone = result['data']['phone'] ?? '';
+            address = result['data']['address'] ?? '';
+            profilePicture = result['data']['profile_picture'] ?? '';
+            role = result['data']['role'] ?? '';
+            createdAt = result['data']['created_at'] ?? '';
+            isLoading = false;
+          });
+        }
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
-}
-
-class GallerySection extends StatelessWidget {
-  final List<String> images = [
-    'assets/images/cat2.jpg',
-    'assets/images/dog_cocoa.png',
-    'assets/images/dog_marly.png',
-    'assets/images/dog_walt.png',
-    'assets/images/cat_brook.png',
-    'assets/images/cat_marly.png',
-  ];
-
-  GallerySection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
+    return Padding(
+      padding: EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Gallery',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
+          Card(
+            elevation: 0,
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
             ),
-            itemCount: images.length,
-            itemBuilder: (context, index) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.asset(
-                  images[index],
-                  fit: BoxFit.cover,
-                ),
-              );
-            },
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(
+                    'Profil',
+                    style: TextStyle(
+                      color: Color(0xFF8B6BB7),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  isLoading
+                      ? CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF8B6BB7)),
+                        )
+                      : Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Color(0xFFE0D4F6),
+                              backgroundImage: profilePicture.isNotEmpty
+                                  ? NetworkImage('http://localhost/mobileapps/$profilePicture')
+                                  : null,
+                              child: profilePicture.isEmpty
+                                  ? Text(
+                                      username.isNotEmpty ? username[0].toUpperCase() : '?',
+                                      style: TextStyle(
+                                        fontSize: 40,
+                                        color: Color(0xFF8B6BB7),
+                                      ),
+                                    )
+                                  : null,
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              '@$username',
+                              style: TextStyle(
+                                color: Color(0xFF8B6BB7),
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              role.toUpperCase(),
+                              style: TextStyle(
+                                color: Color(0xFF8B6BB7),
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
+          // Information Card
+          Card(
+            elevation: 0,
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Informasi Akun',
+                    style: TextStyle(
+                      color: Color(0xFF8B6BB7),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  _buildInfoRow('Username', '@$username'),
+                  _buildInfoRow('Email', email),
+                  _buildInfoRow('Nomor HP', phone),
+                  _buildInfoRow('Alamat', address),
+                ],
+              ),
+            ),
           ),
         ],
       ),
     );
   }
-}
-class LogoutButton extends StatelessWidget {
-  const LogoutButton({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-          (route) => false,
-        );
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logged out successfully')),
-        );
-      },
-      child: const Text('Logout'),
+  Widget _buildInfoRow(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 14,
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          value.isEmpty ? '-' : value,
+          style: TextStyle(fontSize: 16),
+        ),
+        Divider(color: Colors.grey[300]),
+        SizedBox(height: 8),
+      ],
     );
   }
 }
