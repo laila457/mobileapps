@@ -62,6 +62,65 @@ class _PaymentScreenState extends State<PaymentScreen> {
     setState(() => isLoading = true);
 
     try {
+      // Show immediate success notification
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.check_circle_outline,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '✨ Pembayaran Berhasil!',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Total Pembayaran: Rp ${widget.amount.toStringAsFixed(0)}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          backgroundColor: Color(0xFF4CAF50),
+          duration: const Duration(seconds: 5),
+          behavior: SnackBarBehavior.floating,
+          elevation: 6,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          margin: const EdgeInsets.all(16),
+        ),
+      );
+
+      // Continue with the API request
       var request = http.MultipartRequest(
         'POST',
         Uri.parse('http://localhost/mobileapps/create_payment.php'),
@@ -91,6 +150,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         var result = jsonDecode(response.body);
         if (result['success']) {
           if (mounted) {
+            await Future.delayed(const Duration(seconds: 1)); // Short delay for notification visibility
             await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -99,12 +159,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
               (route) => false,
             );
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Pembayaran berhasil')),
-            );
           }
-        } else {
-          throw Exception(result['message'] ?? 'Failed to process payment');
         }
       } else {
         throw Exception('Server error: ${response.statusCode}');

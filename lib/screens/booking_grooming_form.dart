@@ -99,44 +99,63 @@ class _BookingGroomingFormState extends State<BookingGroomingForm> {
           if (result['success']) {
             // Enhanced notification
             NotificationService.showNotification(
-              title: 'Booking Grooming Berhasil! 🐾',
-              body: 'Jadwal grooming untuk ${jenisHewan}mu telah dikonfirmasi.\n'
-                   'Tanggal: ${DateFormat('dd/MM/yyyy').format(selectedDate)}\n'
-                   'Waktu: ${selectedTime.format(context)}',
+              title: '✨ Booking Grooming Berhasil!',
+              body: 'Hai, booking grooming untuk ${jenisHewan}mu sudah terjadwal.\n'
+                   '📅 Tanggal: ${DateFormat('dd/MM/yyyy').format(selectedDate)}\n'
+                   '⏰ Waktu: ${selectedTime.format(context)}\n'
+                   '💅 Paket: $paketGrooming',
             );
             
             if (mounted) {
               // Show success snackbar
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Row(
-                    children: [
-                      Icon(Icons.check_circle, color: Colors.white),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Booking Berhasil!'),
-                            Text(
-                              'Total: Rp ${_calculatePrice().toStringAsFixed(0)}',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
+                  content: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(Icons.check_circle, color: Colors.white),
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Booking Berhasil!',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                'Total Pembayaran: Rp ${_calculatePrice().toStringAsFixed(0)}',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   backgroundColor: Colors.green,
-                  duration: Duration(seconds: 3),
+                  duration: Duration(seconds: 4),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                   ),
+                  margin: EdgeInsets.all(16),
                 ),
               );
 
+              // Continue with navigation...
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -219,7 +238,15 @@ Widget build(BuildContext context) {
                             prefixIcon: const Icon(Icons.phone),
                           ),
                           keyboardType: TextInputType.phone,
-                          validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Wajib diisi';
+                            }
+                            if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                              return 'Nomor HP hanya boleh berisi angka';
+                            }
+                            return null;
+                          },
                         ),
                       ],
                     ),

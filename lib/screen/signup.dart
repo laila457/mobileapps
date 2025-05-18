@@ -186,10 +186,13 @@ class _SignupState extends State<Signup> {
                       // Add Phone field
                       TextFormField(
                         controller: phoneController,
-                        keyboardType: TextInputType.phone,
+                        keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Phone Number';
+                          }
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                            return 'Please enter numbers only';
                           }
                           return null;
                         },
@@ -201,6 +204,10 @@ class _SignupState extends State<Signup> {
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.black12),
                             borderRadius: BorderRadius.circular(10),
+                          ),
+                          errorStyle: const TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -238,11 +245,14 @@ class _SignupState extends State<Signup> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Password';
                           }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
+                          }
                           return null;
                         },
                         decoration: InputDecoration(
                           label: const Text('Password'),
-                          hintText: 'Enter Password',
+                          hintText: 'Enter Password (min. 6 characters)',
                           hintStyle: const TextStyle(color: Colors.black26),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.black12),

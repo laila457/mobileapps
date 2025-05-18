@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wellpage/pet/formbooking.dart';
-import 'package:wellpage/pet/bookpenitipan.dart';
+import 'package:wellpage/screens/penitipan_booking_form.dart';
 class Penitipan2 extends StatelessWidget {
   const Penitipan2({super.key});
 
@@ -149,7 +149,7 @@ class Penitipan2 extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BookingScreen()),
+                    MaterialPageRoute(builder: (context) => PenitipanBookingForm()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
