@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:wellpage/helpers/dbhelphistory.dart';
 import 'package:flutter/material.dart';
 import '../screen/welcome.dart';
 import 'package:http/http.dart' as http;
@@ -219,12 +219,158 @@ class _ProfileSectionState extends State<ProfileSection> {
               ),
             ),
           ),
+          SizedBox(height: 16),
+          // Add Grooming History Card
+          Card(
+            elevation: 0,
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.history, color: Color(0xFF8B6BB7)),
+                      SizedBox(width: 8),
+                      Text(
+                        'Riwayat Grooming',
+                        style: TextStyle(
+                          color: Color(0xFF8B6BB7),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  FutureBuilder<List<Map<String, dynamic>>>(
+                    future: _fetchGroomingHistory(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF8B6BB7)),
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(
+                          child: Text('Belum ada riwayat grooming'),
+                        );
+                      }
+                      
+                      // Update the ListView.builder section:
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          final booking = snapshot.data![index];
+                          return Card(
+                            margin: EdgeInsets.only(bottom: 8),
+                            child: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Paket: ${booking['paket_grooming']}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF8B6BB7),
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      Text(
+                                        DBHelpHistory.formatPrice(booking['total_harga']),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF8B6BB7),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text('Jenis Hewan: ${booking['jenis_hewan']}'),
+                                  Text('Tanggal: ${DBHelpHistory.formatDate(booking['tanggal_grooming'])}'),
+                                  Text('Waktu: ${DBHelpHistory.formatTime(booking['waktu_booking'])}'),
+                                  Text('Pengantaran: ${booking['pengantaran']}'),
+                                  if (booking['pengantaran'] == 'Antar Jemput') ...[
+                                    Text('Kecamatan: ${booking['kecamatan']}'),
+                                    Text('Desa: ${booking['desa']}'),
+                                    Text('Alamat: ${booking['detail_alamat']}'),
+                                  ],
+                                  SizedBox(height: 4),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Pembayaran: ${booking['metode_pembayaran']}'),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: Color(int.parse(DBHelpHistory.getStatusColor(booking['status_pembayaran']).replaceAll('#', '0xFF'))).withOpacity(0.2),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Text(
+                                          booking['status_pembayaran'],
+                                          style: TextStyle(
+                                            color: Color(int.parse(DBHelpHistory.getStatusColor(booking['status_pembayaran']).replaceAll('#', '0xFF'))),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
+  Future<List<Map<String, dynamic>>> _fetchGroomingHistory() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost/mobileapps/get_grooming_history.php'),
+      );
+
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        if (result['success'] && result['data'] != null) {
+          final List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(result['data']);
+          if (data.isEmpty) {
+            return [];
+          }
+          return data;
+        }
+      }
+      return [];
+    } catch (e) {
+      print('Error fetching grooming history: $e');
+      return [];
+    }
+  }
+}
+
+Widget _buildInfoRow(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -238,11 +384,13 @@ class _ProfileSectionState extends State<ProfileSection> {
         SizedBox(height: 4),
         Text(
           value.isEmpty ? '-' : value,
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(
+            fontSize: 16,
+            color: Color(0xFF8B6BB7),
+          ),
         ),
         Divider(color: Colors.grey[300]),
         SizedBox(height: 8),
       ],
     );
   }
-}
