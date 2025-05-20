@@ -83,7 +83,7 @@ class _ProfileSectionState extends State<ProfileSection> {
     super.initState();
     _loadUserData();
     // Set up periodic data refresh
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) => _loadUserData());
+    _timer = Timer.periodic(Duration(seconds: 300), (timer) => _loadUserData());
   }
 
   @override

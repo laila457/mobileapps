@@ -21,8 +21,8 @@ class _PenitipanBookingFormState extends State<PenitipanBookingForm> {
   final catatanController = TextEditingController();
   
   // Add these lists
-  final List<String> kecamatan = ['Kecamatan A', 'Kecamatan B', 'Kecamatan C'];
-  final List<String> desa = ['Desa 1', 'Desa 2', 'Desa 3'];
+  final List<String> kecamatan = ['Telukjambe Timur'];
+  final List<String> desa = ['Sukaharja', 'Pinayungan', 'Puseurjaya'];
   
   String? selectedJenisHewan;
   String? selectedPaket;
@@ -339,7 +339,7 @@ class _PenitipanBookingFormState extends State<PenitipanBookingForm> {
                         children: [
                           Icon(Icons.star_border, color: darkPurple),
                           SizedBox(width: 10),
-                          Text('Regular - Rp ${paketHarga['Regular']?.toStringAsFixed(0)}/hari'),
+                          Text('Regular - Rp ${paketHarga['Regular']?.toStringAsFixed(0)}/hari (Kandang standar, makan 2x)'),
                         ],
                       ),
                     ),
@@ -349,7 +349,7 @@ class _PenitipanBookingFormState extends State<PenitipanBookingForm> {
                         children: [
                           Icon(Icons.star, color: darkPurple),
                           SizedBox(width: 10),
-                          Text('Premium - Rp ${paketHarga['Premium']?.toStringAsFixed(0)}/hari'),
+                          Text('Premium - Rp ${paketHarga['Premium']?.toStringAsFixed(0)}/hari (Kandang besar, makan 3x, grooming)'),
                         ],
                       ),
                     ),
@@ -482,7 +482,6 @@ class _PenitipanBookingFormState extends State<PenitipanBookingForm> {
                   ),
                 ),
                 const SizedBox(height: 16),
-
                 Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
@@ -498,7 +497,7 @@ class _PenitipanBookingFormState extends State<PenitipanBookingForm> {
                             Icon(Icons.local_shipping, color: darkPurple),
                             SizedBox(width: 8),
                             Text(
-                              'Metode Pengantaran',
+                              'Metode Pengantaran (Free pengantaran daerah Telukjambe Timur)',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,

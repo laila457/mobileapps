@@ -26,8 +26,8 @@ class _BookingGroomingFormState extends State<BookingGroomingForm> {
   String kecamatan = '';
   String desa = '';
 
-  final List<String> kecamatanList = ['Karawang Barat', 'Karawang Timur', 'Telukjambe'];
-  final List<String> desaList = ['Adiarsa', 'Karawang', 'Telukjambe'];
+  final List<String> kecamatanList = ['Telukjambe Timur'];
+  final List<String> desaList = ['Sukaharja', 'Pinayungan', 'Puseurjaya'];
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -332,7 +332,7 @@ Widget build(BuildContext context) {
                 ),
 
                 const SizedBox(height: 16),
-                const Text('Pengantaran'),
+                const Text('Pengantaran (Free pengantaran daerah Telukjambe Timur)'),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
