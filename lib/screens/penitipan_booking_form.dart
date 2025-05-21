@@ -33,8 +33,9 @@ class _PenitipanBookingFormState extends State<PenitipanBookingForm> {
   DateTime? checkOutDate;
 
   final Map<String, double> paketHarga = {
-    'Regular': 35000.0,
-    'Premium': 50000.0,
+    'basic': 35000.0,
+    'premium': 50000.0,
+    'exclusive': 75000.0,
   };
 
   double calculateTotalPrice() {
@@ -56,27 +57,33 @@ class _PenitipanBookingFormState extends State<PenitipanBookingForm> {
       final totalHarga = calculateTotalPrice();
       
       try {
+        // Convert pengantaran to match enum values
+        String dbPengantaran = selectedPengantaran == 'Antar Jemput' ? 'antar' : 'jemput';
+        
+        // Convert paket_penitipan to match enum values
+        String dbPaket = selectedPaket!.toLowerCase();
+
         final response = await http.post(
           Uri.parse('http://localhost/mobileapps/create_penitipan.php'),
-          headers: <String, String>{
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: {
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'user_id': null, // Should be set from login session
             'check_in': DateFormat('yyyy-MM-dd').format(checkInDate!),
             'check_out': DateFormat('yyyy-MM-dd').format(checkOutDate!),
             'nama_pemilik': namaPemilikController.text,
             'no_hp': noHpController.text,
             'nama_hewan': namaHewanController.text,
             'jenis_hewan': selectedJenisHewan,
-            'paket_penitipan': selectedPaket,
-            'pengantaran': selectedPengantaran,
-            'kecamatan': selectedPengantaran == 'Antar Jemput' ? selectedKecamatan : '',
-            'desa': selectedPengantaran == 'Antar Jemput' ? selectedDesa : '',
-            'detail_alamat': selectedPengantaran == 'Antar Jemput' ? alamatController.text : '',
+            'paket_penitipan': dbPaket,
+            'pengantaran': dbPengantaran,
+            'kecamatan': selectedPengantaran == 'Antar Jemput' ? selectedKecamatan : null,
+            'desa': selectedPengantaran == 'Antar Jemput' ? selectedDesa : null,
+            'detail_alamat': selectedPengantaran == 'Antar Jemput' ? alamatController.text : null,
             'catatan': catatanController.text,
-            'total_harga': totalHarga.toString(),
-            'metode_pembayaran': 'pending', // Empty string instead of 'pending'
-          },
+            'total_harga': totalHarga,
+            'metode_pembayaran': 'pending',
+            'status': 'pending'
+          }),
         );
 
         final result = jsonDecode(response.body);
@@ -334,22 +341,32 @@ class _PenitipanBookingFormState extends State<PenitipanBookingForm> {
                   value: selectedPaket,
                   items: [
                     DropdownMenuItem(
-                      value: 'Regular',
+                      value: 'basic',
                       child: Row(
                         children: [
                           Icon(Icons.star_border, color: darkPurple),
                           SizedBox(width: 10),
-                          Text('Regular - Rp ${paketHarga['Regular']?.toStringAsFixed(0)}/hari (Kandang standar, makan 2x)'),
+                          Text('Basic - Rp ${paketHarga['basic']?.toStringAsFixed(0)}/hari (Kandang standar, makan 2x)'),
                         ],
                       ),
                     ),
                     DropdownMenuItem(
-                      value: 'Premium',
+                      value: 'premium',
                       child: Row(
                         children: [
                           Icon(Icons.star, color: darkPurple),
                           SizedBox(width: 10),
-                          Text('Premium - Rp ${paketHarga['Premium']?.toStringAsFixed(0)}/hari (Kandang besar, makan 3x, grooming)'),
+                          Text('Premium - Rp ${paketHarga['premium']?.toStringAsFixed(0)}/hari (Kandang besar, makan 3x)'),
+                        ],
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: 'exclusive',
+                      child: Row(
+                        children: [
+                          Icon(Icons.stars, color: darkPurple),
+                          SizedBox(width: 10),
+                          Text('Exclusive - Rp ${paketHarga['exclusive']?.toStringAsFixed(0)}/hari (VIP room, makan 4x, grooming)'),
                         ],
                       ),
                     ),

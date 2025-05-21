@@ -10,50 +10,41 @@ if ($conn->connect_error) {
     die(json_encode(['status' => 'error', 'message' => 'Connection failed']));
 }
 
-$bukti_transaksi = null;
-if (isset($_FILES['bukti_transaksi']) && $_FILES['bukti_transaksi']['error'] === UPLOAD_ERR_OK) {
-    $upload_dir = 'assets/uploads/payments';
-    if (!file_exists($upload_dir)) {
-        mkdir($upload_dir, 0777, true);
-    }
-    
-    $file_extension = pathinfo($_FILES['bukti_transaksi']['name'], PATHINFO_EXTENSION);
-    $file_name = uniqid() . '.' . $file_extension;
-    $file_path = $upload_dir . $file_name;
-    
-    if (move_uploaded_file($_FILES['bukti_transaksi']['tmp_name'], $file_path)) {
-        $bukti_transaksi = $file_path;
-    }
-}
+// Get JSON data
+$data = json_decode(file_get_contents('php://input'), true);
 
-$sql = "INSERT INTO penitipan (check_in, check_out, nama_pemilik, no_hp, nama_hewan, 
-        jenis_hewan, paket_penitipan, pengantaran, kecamatan, desa, detail_alamat, 
-        catatan, total_harga, metode_pembayaran, bukti_transaksi) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO penitipan (
+    user_id, check_in, check_out, nama_pemilik, no_hp, nama_hewan, 
+    jenis_hewan, paket_penitipan, pengantaran, kecamatan, desa, 
+    detail_alamat, catatan, total_harga, metode_pembayaran, status
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssssssssssdss", 
-    $_POST['check_in'],
-    $_POST['check_out'],
-    $_POST['nama_pemilik'],
-    $_POST['no_hp'],
-    $_POST['nama_hewan'],
-    $_POST['jenis_hewan'],
-    $_POST['paket_penitipan'],
-    $_POST['pengantaran'],
-    $_POST['kecamatan'],
-    $_POST['desa'],
-    $_POST['detail_alamat'],
-    $_POST['catatan'],
-    $_POST['total_harga'],
-    $_POST['metode_pembayaran'],
-    $bukti_transaksi
+$stmt->bind_param("issssssssssssdss", 
+    $data['user_id'],
+    $data['check_in'],
+    $data['check_out'],
+    $data['nama_pemilik'],
+    $data['no_hp'],
+    $data['nama_hewan'],
+    $data['jenis_hewan'],
+    $data['paket_penitipan'],
+    $data['pengantaran'],
+    $data['kecamatan'],
+    $data['desa'],
+    $data['detail_alamat'],
+    $data['catatan'],
+    $data['total_harga'],
+    $data['metode_pembayaran'],
+    $data['status']
 );
 
 if ($stmt->execute()) {
+    $booking_id = $stmt->insert_id;
     echo json_encode([
         'status' => 'success',
-        'message' => 'Booking created successfully'
+        'message' => 'Booking created successfully',
+        'booking_id' => $booking_id
     ]);
 } else {
     echo json_encode([

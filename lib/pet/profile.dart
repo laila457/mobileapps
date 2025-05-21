@@ -264,7 +264,6 @@ class _ProfileSectionState extends State<ProfileSection> {
                         );
                       }
                       
-                      // Update the ListView.builder section:
                       return ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -282,7 +281,7 @@ class _ProfileSectionState extends State<ProfileSection> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'Paket: ${booking['paket_grooming']}',
+                                        'Paket: ${booking['paket_grooming'].toString().toUpperCase()}',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xFF8B6BB7),
@@ -290,7 +289,7 @@ class _ProfileSectionState extends State<ProfileSection> {
                                         ),
                                       ),
                                       Text(
-                                        DBHelpHistory.formatPrice(booking['total_harga']),
+                                        'Rp ${booking['total_harga']}',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xFF8B6BB7),
@@ -299,30 +298,30 @@ class _ProfileSectionState extends State<ProfileSection> {
                                     ],
                                   ),
                                   SizedBox(height: 8),
-                                  Text('Jenis Hewan: ${booking['jenis_hewan']}'),
-                                  Text('Tanggal: ${DBHelpHistory.formatDate(booking['tanggal_grooming'])}'),
-                                  Text('Waktu: ${DBHelpHistory.formatTime(booking['waktu_booking'])}'),
-                                  Text('Pengantaran: ${booking['pengantaran']}'),
-                                  if (booking['pengantaran'] == 'Antar Jemput') ...[
-                                    Text('Kecamatan: ${booking['kecamatan']}'),
-                                    Text('Desa: ${booking['desa']}'),
-                                    Text('Alamat: ${booking['detail_alamat']}'),
+                                  Text('Jenis Hewan: ${booking['jenis_hewan'] ?? '-'}'),
+                                  Text('Tanggal: ${booking['tanggal_grooming'] ?? '-'}'),
+                                  Text('Waktu: ${booking['waktu_booking'] ?? '-'}'),
+                                  Text('Pengantaran: ${booking['pengantaran'].toString().toUpperCase()}'),
+                                  if (booking['pengantaran'] == 'antar') ...[
+                                    Text('Kecamatan: ${booking['kecamatan'] ?? '-'}'),
+                                    Text('Desa: ${booking['desa'] ?? '-'}'),
+                                    Text('Alamat: ${booking['detail_alamat'] ?? '-'}'),
                                   ],
                                   SizedBox(height: 4),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('Pembayaran: ${booking['metode_pembayaran']}'),
+                                      Text('Pembayaran: ${booking['metode_pembayaran'] ?? 'Belum dibayar'}'),
                                       Container(
                                         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                         decoration: BoxDecoration(
-                                          color: Color(int.parse(DBHelpHistory.getStatusColor(booking['status_pembayaran']).replaceAll('#', '0xFF'))).withOpacity(0.2),
+                                          color: _getStatusColor(booking['status'] ?? 'pending').withOpacity(0.2),
                                           borderRadius: BorderRadius.circular(12),
                                         ),
                                         child: Text(
-                                          booking['status_pembayaran'],
+                                          (booking['status'] ?? 'pending').toUpperCase(),
                                           style: TextStyle(
-                                            color: Color(int.parse(DBHelpHistory.getStatusColor(booking['status_pembayaran']).replaceAll('#', '0xFF'))),
+                                            color: _getStatusColor(booking['status'] ?? 'pending'),
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -347,19 +346,23 @@ class _ProfileSectionState extends State<ProfileSection> {
   }
 
   Future<List<Map<String, dynamic>>> _fetchGroomingHistory() async {
+    if (email.isEmpty) return [];
+    
     try {
       final response = await http.get(
-        Uri.parse('http://localhost/mobileapps/get_grooming_history.php'),
+        Uri.parse('http://localhost/mobileapps/get_grooming_history.php?email=$email'),
+      ).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Connection timeout');
+        },
       );
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
+        print('Grooming history response: $result'); // Debug print
         if (result['success'] && result['data'] != null) {
-          final List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(result['data']);
-          if (data.isEmpty) {
-            return [];
-          }
-          return data;
+          return List<Map<String, dynamic>>.from(result['data']);
         }
       }
       return [];
@@ -368,9 +371,23 @@ class _ProfileSectionState extends State<ProfileSection> {
       return [];
     }
   }
-}
 
-Widget _buildInfoRow(String label, String value) {
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return Colors.orange;
+      case 'process':
+        return Colors.blue;
+      case 'success':
+        return Colors.green;
+      case 'cancel':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  Widget _buildInfoRow(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -394,3 +411,4 @@ Widget _buildInfoRow(String label, String value) {
       ],
     );
   }
+}

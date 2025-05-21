@@ -25,6 +25,7 @@ try {
     }
 
     $sql = "INSERT INTO grooming (
+        user_id,
         tanggal_grooming,
         waktu_booking,
         nama_pemilik,
@@ -37,8 +38,9 @@ try {
         detail_alamat,
         total_harga,
         metode_pembayaran,
-        status_pembayaran
+        status
     ) VALUES (
+        :user_id,
         :tanggal_grooming,
         :waktu_booking,
         :nama_pemilik,
@@ -51,12 +53,13 @@ try {
         :detail_alamat,
         :total_harga,
         :metode_pembayaran,
-        :status_pembayaran
+        :status
     )";
 
     $stmt = $conn->prepare($sql);
 
     $stmt->execute([
+        ':user_id' => $data['user_id'] ?? null,
         ':tanggal_grooming' => $data['tanggal_grooming'],
         ':waktu_booking' => $data['waktu_booking'],
         ':nama_pemilik' => $data['nama_pemilik'],
@@ -68,8 +71,8 @@ try {
         ':desa' => $data['desa'] ?: null,
         ':detail_alamat' => $data['detail_alamat'] ?: null,
         ':total_harga' => $data['total_harga'],
-        ':metode_pembayaran' => $data['metode_pembayaran'],
-        ':status_pembayaran' => $data['status_pembayaran']
+        ':metode_pembayaran' => $data['metode_pembayaran'] ?: 'pending',
+        ':status' => $data['status'] ?: 'pending'
     ]);
 
     $bookingId = $conn->lastInsertId();

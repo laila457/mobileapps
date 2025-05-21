@@ -74,23 +74,41 @@ class _BookingGroomingFormState extends State<BookingGroomingForm> {
         paketGrooming.isNotEmpty &&
         pengantaran.isNotEmpty) {
       try {
+        // Convert paket_grooming to match enum values
+        String dbPaketGrooming = '';
+        switch (paketGrooming) {
+          case 'Basic':
+            dbPaketGrooming = 'basic';
+            break;
+          case 'Kutu & Jamur':
+            dbPaketGrooming = 'kutu';
+            break;
+          case 'Full Grooming':
+            dbPaketGrooming = 'full';
+            break;
+        }
+
+        // Convert pengantaran to match enum values
+        String dbPengantaran = pengantaran == 'Antar Jemput' ? 'antar' : 'jemput';
+
         final response = await http.post(
           Uri.parse('http://localhost/mobileapps/create.php'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
+            'user_id': null, // This should be set from login session
             'tanggal_grooming': DateFormat('yyyy-MM-dd').format(selectedDate),
             'waktu_booking': '${selectedTime.hour}:${selectedTime.minute}:00',
             'nama_pemilik': namaPemilikController.text,
             'no_hp': noHpController.text,
             'jenis_hewan': jenisHewan,
-            'paket_grooming': paketGrooming,
-            'pengantaran': pengantaran,
-            'kecamatan': pengantaran == 'Antar Jemput' ? kecamatan : '',
-            'desa': pengantaran == 'Antar Jemput' ? desa : '',
-            'detail_alamat': pengantaran == 'Antar Jemput' ? alamatController.text : '',
+            'paket_grooming': dbPaketGrooming,
+            'pengantaran': dbPengantaran,
+            'kecamatan': pengantaran == 'Antar Jemput' ? kecamatan : null,
+            'desa': pengantaran == 'Antar Jemput' ? desa : null,
+            'detail_alamat': pengantaran == 'Antar Jemput' ? alamatController.text : null,
             'total_harga': _calculatePrice(),
             'metode_pembayaran': 'pending',
-            'status_pembayaran': 'pending'
+            'status': 'pending'
           }),
         );
 
