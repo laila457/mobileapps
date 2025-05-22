@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:wellpage/helpers/dbhelphistory.dart';
 import 'package:flutter/material.dart';
 import '../screen/welcome.dart';
 import 'package:http/http.dart' as http;
@@ -280,12 +279,14 @@ class _ProfileSectionState extends State<ProfileSection> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        'Paket: ${booking['paket_grooming'].toString().toUpperCase()}',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF8B6BB7),
-                                          fontSize: 16,
+                                      Expanded(
+                                        child: Text(
+                                          'Paket: ${booking['paket_grooming'].toString().toUpperCase()}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF8B6BB7),
+                                            fontSize: 16,
+                                          ),
                                         ),
                                       ),
                                       Text(
@@ -298,6 +299,8 @@ class _ProfileSectionState extends State<ProfileSection> {
                                     ],
                                   ),
                                   SizedBox(height: 8),
+                                  Text('Nama: ${booking['nama_pemilik'] ?? '-'}'),
+                                  Text('No HP: ${booking['no_hp'] ?? '-'}'),
                                   Text('Jenis Hewan: ${booking['jenis_hewan'] ?? '-'}'),
                                   Text('Tanggal: ${booking['tanggal_grooming'] ?? '-'}'),
                                   Text('Waktu: ${booking['waktu_booking'] ?? '-'}'),
@@ -328,6 +331,11 @@ class _ProfileSectionState extends State<ProfileSection> {
                                       ),
                                     ],
                                   ),
+                                  if (booking['bukti_transaksi'] != null && booking['bukti_transaksi'].isNotEmpty) ...[
+                                    SizedBox(height: 8),
+                                    Text('Bukti Pembayaran: Sudah diupload',
+                                      style: TextStyle(color: Colors.green)),
+                                  ],
                                 ],
                               ),
                             ),

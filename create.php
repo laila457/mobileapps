@@ -14,6 +14,12 @@ $database = 'happypaws';
 $username = 'root';
 $password = '';
 
+// Add this function before the try block
+function validatePaymentMethod($method) {
+    $validMethods = ['qris', 'cash', 'bankTransfer'];
+    return in_array($method, $validMethods) ? $method : 'pending';
+}
+
 try {
     $conn = new PDO("mysql:host=$host;dbname=$database", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -23,6 +29,9 @@ try {
     if (!$data) {
         throw new Exception('Invalid input data');
     }
+
+    // Validate and format payment method
+    $paymentMethod = validatePaymentMethod($data['metode_pembayaran'] ?? '');
 
     $sql = "INSERT INTO grooming (
         user_id,
@@ -71,16 +80,27 @@ try {
         ':desa' => $data['desa'] ?: null,
         ':detail_alamat' => $data['detail_alamat'] ?: null,
         ':total_harga' => $data['total_harga'],
-        ':metode_pembayaran' => $data['metode_pembayaran'] ?: 'pending',
+        ':metode_pembayaran' => $paymentMethod,
         ':status' => $data['status'] ?: 'pending'
     ]);
 
     $bookingId = $conn->lastInsertId();
 
+    // Add payment method info to response
     echo json_encode([
         'success' => true,
         'message' => 'Booking created successfully',
-        'booking_id' => $bookingId
+        'booking_id' => $bookingId,
+        'payment_method' => [
+            'value' => $paymentMethod,
+            'label' => ucfirst($paymentMethod),
+            'style' => match($paymentMethod) {
+                'qris' => 'success',
+                'cash' => 'warning',
+                'bankTransfer' => 'info',
+                default => 'secondary'
+            }
+        ]
     ]);
 
 } catch(Exception $e) {

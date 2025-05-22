@@ -45,6 +45,13 @@ class _SignupState extends State<Signup> {
         final result = jsonDecode(response.body);
         if (result['status'] == 'success') {
           if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Registration successful! Please login.'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 3),
+              ),
+            );
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const Signin()),

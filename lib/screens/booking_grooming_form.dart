@@ -13,6 +13,42 @@ class BookingGroomingForm extends StatefulWidget {
 }
 
 class _BookingGroomingFormState extends State<BookingGroomingForm> {
+  // Add these variables
+  String? userId;
+  String? userEmail;
+
+  @override
+  void initState() {
+    super.initState();
+    // Replace with actual logged in user's email
+    _loadUserData('user@email.com');
+  }
+
+  Future<void> _loadUserData(String email) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost/mobileapps/get_user_data.php?email=$email'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['success'] == true && data['data'] != null) {
+          setState(() {
+            userId = data['data']['id']?.toString();
+            namaPemilikController.text = data['data']['username'] ?? '';
+            noHpController.text = data['data']['phone'] ?? '';
+            alamatController.text = data['data']['address'] ?? '';
+            userEmail = email;
+          });
+        } else {
+          print('User data not found: ${data['message']}');
+        }
+      }
+    } catch (e) {
+      print('Error loading user data: $e');
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   final namaPemilikController = TextEditingController();
   final noHpController = TextEditingController();
@@ -68,6 +104,7 @@ class _BookingGroomingFormState extends State<BookingGroomingForm> {
     }
   }
 
+  // Update _submitForm method
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate() &&
         jenisHewan.isNotEmpty &&
@@ -95,7 +132,7 @@ class _BookingGroomingFormState extends State<BookingGroomingForm> {
           Uri.parse('http://localhost/mobileapps/create.php'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
-            'user_id': null, // This should be set from login session
+            'user_id': userId, // Add user ID
             'tanggal_grooming': DateFormat('yyyy-MM-dd').format(selectedDate),
             'waktu_booking': '${selectedTime.hour}:${selectedTime.minute}:00',
             'nama_pemilik': namaPemilikController.text,
@@ -107,7 +144,7 @@ class _BookingGroomingFormState extends State<BookingGroomingForm> {
             'desa': pengantaran == 'Antar Jemput' ? desa : null,
             'detail_alamat': pengantaran == 'Antar Jemput' ? alamatController.text : null,
             'total_harga': _calculatePrice(),
-            'metode_pembayaran': 'pending',
+            'metode_pembayaran': 'qris, transfer bank, gopay, dana',
             'status': 'pending'
           }),
         );

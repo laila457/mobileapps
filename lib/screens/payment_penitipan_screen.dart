@@ -259,6 +259,40 @@ class _PaymentPenitipanScreenState extends State<PaymentPenitipanScreen> {
                 });
               },
             ),
+            if (selectedPaymentMethod == 'QRIS') ...[
+              const SizedBox(height: 24),
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        'assets/images/scene.jpeg',
+                        height: 300,
+                        width: 300,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'SATU QRIS UNTUK SEMUA',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             if (selectedPaymentMethod != null && selectedPaymentMethod != 'Cash')
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

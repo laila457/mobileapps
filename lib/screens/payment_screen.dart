@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:http_parser/http_parser.dart';  // Add this import
+import 'package:http_parser/http_parser.dart'; // Add this import
 import 'dart:io';
 import 'dart:convert';
 import 'package:wellpage/pet/dasboard.dart';
@@ -25,8 +25,16 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   String selectedMethod = '';
-  XFile? imageFile;  // Change to XFile
+  XFile? imageFile;
   bool isLoading = false;
+
+  // Add payment methods map
+  final Map<String, String> paymentMethods = {
+    'dana': 'DANA',
+    'qris': 'QRIS',
+    'gopay': 'GoPay',
+    'bankTransfer': 'Bank Transfer',
+  };
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -36,10 +44,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
         maxWidth: 1024,
         maxHeight: 1024,
       );
-      
+
       if (pickedFile != null) {
         setState(() {
-          imageFile = pickedFile;  // Store XFile directly
+          imageFile = pickedFile; // Store XFile directly
         });
       }
     } catch (e) {
@@ -54,7 +62,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> _submitPayment() async {
     if (selectedMethod.isEmpty || imageFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pilih metode pembayaran dan upload bukti')),
+        const SnackBar(
+            content: Text('Pilih metode pembayaran dan upload bukti')),
       );
       return;
     }
@@ -127,13 +136,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
       );
 
       request.fields['booking_id'] = widget.bookingId;
-      request.fields['payment_method'] = selectedMethod;
-      request.fields['status_pembayaran'] = 'pending';  // Add status
-      
+      request.fields['metode_pembayaran'] = selectedMethod;
+      request.fields['status_pembayaran'] = 'pending';
+
       // Handle file upload
       final bytes = await imageFile!.readAsBytes();
-      final filename = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
-      
+      final filename =
+          DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+
       request.files.add(
         http.MultipartFile.fromBytes(
           'bukti_transaksi',
@@ -145,12 +155,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      
+
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
         if (result['success']) {
           if (mounted) {
-            await Future.delayed(const Duration(seconds: 1)); // Short delay for notification visibility
+            await Future.delayed(const Duration(
+                seconds: 1)); // Short delay for notification visibility
             await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -216,19 +227,71 @@ class _PaymentScreenState extends State<PaymentScreen> {
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
-              children: [
-                'DANA',
-                'OVO',
-                'GoPay',
-                'Bank Transfer',
-              ].map((method) => ChoiceChip(
-                label: Text(method),
-                selected: selectedMethod == method,
-                onSelected: (selected) {
-                  setState(() => selectedMethod = selected ? method : '');
-                },
-              )).toList(),
+              children: paymentMethods.entries
+                  .map((entry) => ChoiceChip(
+                        label: Text(entry.value),
+                        selected: selectedMethod == entry.key,
+                        selectedColor: Colors.purple.shade100,
+                        onSelected: (selected) {
+                          setState(
+                              () => selectedMethod = selected ? entry.key : '');
+                        },
+                      ))
+                  .toList(),
             ),
+            if (selectedMethod == 'qris') ...[
+              // Changed from 'QRIS' to 'qris' to match the map key
+              const SizedBox(height: 16),
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        'assets/images/scene.jpeg',
+                        height: 300,
+                        width: 300,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          print('Error loading QR: $error');
+                          return Container(
+                            height: 300,
+                            width: 300,
+                            color: Colors.grey[200],
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.error_outline,
+                                    size: 50, color: Colors.grey),
+                                SizedBox(height: 8),
+                                Text('QR Code tidak tersedia',
+                                    style: TextStyle(color: Colors.grey)),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'SATU QRIS UNTUK SEMUA',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 24),
             const Text(
               'Upload Bukti Pembayaran',
@@ -267,7 +330,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 child: Container(
                   height: 200,
                   decoration: BoxDecoration(
-                    border: Border.all(color: const Color.fromARGB(255, 0, 255, 85)),
+                    border: Border.all(
+                        color: const Color.fromARGB(255, 0, 255, 85)),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Center(
